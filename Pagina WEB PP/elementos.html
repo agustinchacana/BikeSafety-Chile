@@ -1,0 +1,111 @@
+<!D<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elementos Fundamentales | Seguridad</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Estilo para asegurar que las tarjetas tengan una proporción limpia */
+        .interactive-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+        }
+
+        /* Control estricto del tamaño de las imágenes para que no dominen la pantalla */
+        .interactive-card img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover; /* Evita que la imagen se deforme */
+            border-radius: 8px;
+            flex-shrink: 0;
+            border: 2px solid #475569;
+        }
+
+        .interactive-info {
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .interactive-info h3 {
+            margin-top: 0;
+            color: #34d399;
+        }
+
+        /* Adaptabilidad para celulares (si la pantalla es chica, se ponen en columna) */
+        @media (max-width: 768px) {
+            .interactive-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            .interactive-info {
+                text-align: center;
+            }
+            .interactive-card img {
+                width: 100%;
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">🛡️ BikeSafety Chile</div>
+            <ul class="nav-links"><li><a href="index.html">Volver al Inicio</a></li></ul>
+        </nav>
+    </header>
+
+    <div class="container" style="margin-top: 100px; text-align: left;">
+        <a href="index.html" class="back-link">&larr; Volver al menú principal</a>
+        <h1>Elementos Fundamentales de Seguridad</h1>
+        <p class="section-desc">Conoce la función exacta de cada implemento y cuándo debes ocuparlo.</p>
+
+        <div class="element-list-page" style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="interactive-card">
+                <img src="https://cl-cenco-pim-resizer.ecomm.cencosud.com/unsafe/adaptive-fit-in/3840x0/filters:quality(75)/prd-cl/product-medias/0990b655-33ae-4431-ab61-7e5c8c013bab/MK261IOX7N/MK261IOX7N-1/1743108491458-MK261IOX7N-1-2.jpg" alt="Casco">
+                <div class="interactive-info">
+                    <h3>1. El Casco (Protección Craneal y MIPS)</h3>
+                    <p><strong>Función protectora:</strong> Barrera de deformación controlada que absorbe la energía cinética y previene el traumatismo encéfalo-craneano.</p>
+                    <p><strong>Ocasión de uso:</strong> <em>Obligatorio en el 100% de las salidas</em>, sin excepción.</p>
+                </div>
+            </div>
+
+            <div class="interactive-card">
+                <img src="https://http2.mlstatic.com/D_NQ_NP_816659-MLA108524515711_032026-O.webp" alt="Luces">
+                <div class="interactive-info">
+                    <h3>2. Luces de Visibilidad</h3>
+                    <p><strong>Función protectora:</strong> Emiten haces luminosos para alertar a conductores de vehículos sobre tu presencia en el entorno.</p>
+                    <p><strong>Ocasión de uso:</strong> Obligatorias en atardecer, noche, días con neblina o baja visibilidad urbana.</p>
+                </div>
+            </div>
+
+            <div class="interactive-card">
+                <img src="https://www.pro-mstore.com/cdn/shop/files/GUANTIFOXFLEXAIRGOLDSTONELIMITEDEDITION_1280x.jpg?v=1768571097" alt="Guantes">
+                <div class="interactive-info">
+                    <h3>3. Guantes de Protección</h3>
+                    <p><strong>Función protectora:</strong> Previenen ampollas por fricción, mejoran el agarre al manillar y protegen de raspones severos al caer.</p>
+                    <p><strong>Ocasión de uso:</strong> Ideales en rutas largas e indispensables en mountain bike.</p>
+                </div>
+            </div>
+
+            <div class="interactive-card">
+                <img src="https://http2.mlstatic.com/D_NQ_NP_947300-MLU74274693326_022024-O.webp" alt="Rodilleras">
+                <div class="interactive-info">
+                    <h3>4. Rodilleras Articuladas de Protección</h3>
+                    <p><strong>Función protectora:</strong> Cuentan con carcasas rígidas o espumas de alto impacto que blindan la rótula y los laterales de la pierna frente a golpes secos.</p>
+                    <p><strong>Ocasión de uso:</strong> Fundamental al practicar disciplinas de gravedad como Enduro, Downhill o BMX.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 - Conciencia Vial y Ciclística.</p></footer>
+</body>
+</html>
