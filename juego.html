@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="juego_meta_titulo">Simulador de Bajada | Seguridad sobre Ruedas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        .game-arena {
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Personaje orientado hacia la derecha (hacia el obstáculo) */
+        .character {
+            font-size: 4rem;
+            position: absolute;
+            left: 30px;
+            transform: scaleX(-1); /* Invierte el emoji para que mire a la derecha */
+            transition: all 0.8s ease-in-out;
+        }
+
+        .character.moving {
+            animation: rideScenario 1.5s infinite alternate ease-in-out;
+        }
+
+        @keyframes rideScenario {
+            0% { transform: scaleX(-1) translateY(0px) rotate(0deg); }
+            50% { transform: scaleX(-1) translateY(-10px) rotate(3deg); }
+            100% { transform: scaleX(-1) translateY(0px) rotate(-3deg); }
+        }
+
+        .character.crash {
+            animation: crashEffect 0.5s ease;
+            filter: drop-shadow(0 0 10px #ef4444);
+        }
+
+        @keyframes crashEffect {
+            0% { transform: scaleX(-1) translateX(0) rotate(0deg); }
+            20% { transform: scaleX(-1) translateX(20px) rotate(15deg); }
+            40% { transform: scaleX(-1) translateX(-20px) rotate(-15deg); }
+            60% { transform: scaleX(-1) translateX(15px) rotate(10deg); }
+            100% { transform: scaleX(-1) translateX(0) rotate(0deg); }
+        }
+
+        .character.success {
+            animation: successRide 1.2s ease forwards;
+        }
+
+        @keyframes successRide {
+            0% { left: 30px; transform: scaleX(-1); }
+            100% { left: 82%; transform: scaleX(-1) scale(1.05); }
+        }
+
+        .obstacle {
+            font-size: 3rem;
+            position: absolute;
+            right: 40px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .obstacle.active {
+            opacity: 1;
+            animation: obstacleAnim 1.5s infinite linear;
+        }
+
+        @keyframes obstacleAnim {
+            0% { right: 30px; transform: scale(0.8); }
+            100% { right: 70%; transform: scale(1.2); }
+        }
+
+        .status-bar {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+            border-left: 4px solid #34d399;
+            line-height: 1.5;
+        }
+
+        /* Estilo para el selector de idioma en el nav */
+        .language-selector select {
+            background: #1f2937;
+            color: white;
+            border: 1px solid #374151;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">🛡️ BikeSafety Chile</div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html" data-i18n="nav_volver_inicio">Volver al Inicio</a></li>
+                </ul>
+                <div class="language-selector">
+                    <select id="select-idioma" onchange="cambiarIdioma(this.value)">
+                        <option value="es">🇪🇸 ES</option>
+                        <option value="en">🇬🇧 EN</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container game-container" style="margin-top: 90px;">
+        <a href="index.html" class="back-link" style="display:block; text-align:left; margin-bottom:15px;" data-i18n="btn_volver">&larr; Volver al menú principal</a>
+        <h2 data-i18n="juego_titulo">🎮 Simulador Inteligente de Protección</h2>
+        <p class="section-desc" data-i18n="juego_subtitulo">Selecciona tu equipamiento y comprueba analíticamente qué pasa en cada escenario.</p>
+
+        <!-- Pantalla 1: Selección de Escenario -->
+        <div id="setup-screen" class="game-card">
+            <h3 data-i18n="juego_elige_escenario">Elige tu Escenario de Desafío:</h3>
+            <div class="scenario-buttons">
+                <button class="btn-scenario" onclick="selectScenario('urbano')" data-i18n="btn_esc_urbano">🏙️ Ciclismo Urbano (Tráfico, puertas y visibilidad)</button>
+                <button class="btn-scenario" onclick="selectScenario('ruta')" data-i18n="btn_esc_ruta">🛣 Ciclismo de Ruta (Curvas a alta velocidad y asfalto)</button>
+                <button class="btn-scenario" onclick="selectScenario('downhill')" data-i18n="btn_esc_dh">⛰️ Downhill Extremo (Rocas, saltos y caídas en cerro)</button>
+            </div>
+        </div>
+
+        <!-- Pantalla 2: Selección de Equipamiento -->
+        <div id="gear-screen" class="game-card" style="display: none;">
+            <h3 id="scenario-title" data-i18n="juego_equipamiento">Equipamiento</h3>
+            <p id="scenario-hint" style="color: #34d399; font-size: 0.9rem; margin-bottom: 15px;"></p>
+            
+            <div class="checkbox-group" id="checkbox-container"></div>
+
+            <button class="btn" onclick="runSimulation()" data-i18n="btn_iniciar_bajada">¡Iniciar Bajada y Simular! 🚀</button>
+        </div>
+
+        <!-- Pantalla 3: Arena de Animación y Resultados -->
+        <div id="result-screen" class="game-card" style="display: none;">
+            <h3 data-i18n="juego_sim_curso">📊 Simulación en Curso</h3>
+            
+            <div class="game-arena">
+                <div id="char-icon" class="character moving">🚴‍♂️</div>
+                <div id="obst-icon" class="obstacle">🚧</div>
+            </div>
+
+            <div id="result-message" class="status-bar"></div>
+            <button class="btn" onclick="resetGame()" data-i18n="btn_intentar_otra">🔄 Intentar otra combinación</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = '';
+
+        function selectScenario(scenario) {
+            currentScenario = scenario;
+            document.getElementById('setup-screen').style.display = 'none';
+            document.getElementById('gear-screen').style.display = 'block';
+            
+            let container = document.getElementById('checkbox-container');
+            container.innerHTML = '';
+
+            let titleElem = document.getElementById('scenario-title');
+            let hintElem = document.getElementById('scenario-hint');
+
+            const lang = localStorage.getItem('idioma_preferido') || 'es';
+
+            if (scenario === 'urbano') {
+                titleElem.innerText = lang === 'en' ? "Equipment for: Urban Cycling" : "Equipamiento para: Ciclismo Urbano";
+                hintElem.innerText = lang === 'en' 
+                    ? "💡 Urban Tip: 3 essential elements (Helmet, Lights, and Gloves). Knee pads are not required in the city."
+                    : "💡 Tip Urbano: 3 elementos esenciales (Casco, Luces y Guantes). Las rodilleras no se requieren en la ciudad.";
+                container.innerHTML = `
+                    <label><input type="checkbox" id="chk-casco" data-name="Casco"> 🪖 <span data-i18n="chk_casco_urbano">Casco Certificado (Protección craneal)</span></label>
+                    <label><input type="checkbox" id="chk-luces" data-name="Luces"> 💡 <span data-i18n="chk_luces_urbano">Luces LED (Visibilidad ante vehículos)</span></label>
+                    <label><input type="checkbox" id="chk-guantes" data-name="Guantes"> 🧤 <span data-i18n="chk_guantes_urbano">Guantes de Ciclismo (Evitan fricción y raspones)</span></label>
+                `;
+            } else if (scenario === 'ruta') {
+                titleElem.innerText = lang === 'en' ? "Equipment for: Road Cycling" : "Equipamiento para: Ciclismo de Ruta";
+                hintElem.innerText = lang === 'en'
+                    ? "💡 Road Tip: At high speeds you require a MIPS Helmet, Glasses, Gloves, and Rear Lights."
+                    : "💡 Tip de Ruta: A alta velocidad requieres Casco MIPS, Gafas, Guantes y Luces traseras.";
+                container.innerHTML = `
+                    <label><input type="checkbox" id="chk-casco" data-name="Casco"> 🪖 <span data-i18n="chk_casco_ruta">Casco Aerodinámico MIPS</span></label>
+                    <label><input type="checkbox" id="chk-gafas" data-name="Gafas"> 🕶️ <span data-i18n="chk_gafas_ruta">Gafas con Protección UV (Evitan polvo/insectos)</span></label>
+                    <label><input type="checkbox" id="chk-guantes" data-name="Guantes"> 🧤 <span data-i18n="chk_guantes_ruta">Guantes (Agarre y fricción en pavimento)</span></label>
+                    <label><input type="checkbox" id="chk-luces" data-name="Luces"> 💡 <span data-i18n="chk_luces_ruta">Luces Traseras (Seguridad en carretera)</span></label>
+                `;
+            } else if (scenario === 'downhill') {
+                titleElem.innerText = lang === 'en' ? "Equipment for: Extreme Downhill" : "Equipamiento para: Downhill Extremo";
+                hintElem.innerText = lang === 'en'
+                    ? "💡 Downhill Tip: Gravity sports require Full Face Helmet, Body Armor, Knee Pads, and Downhill Gloves."
+                    : "💡 Tip Downhill: Deportes de gravedad exigen Casco Integral, Peto, Rodilleras y Guantes de descenso.";
+                container.innerHTML = `
+                    <label><input type="checkbox" id="chk-casco-integral" data-name="Casco Integral"> 🪖 <span data-i18n="chk_casco_int">Casco Integral / Full Face (Mandíbula y cráneo)</span></label>
+                    <label><input type="checkbox" id="chk-peto" data-name="Peto / Jofa"> 🦺 <span data-i18n="chk_peto">Peto Protector (Torso y columna)</span></label>
+                    <label><input type="checkbox" id="chk-rodilleras" data-name="Rodilleras"> 🦵 <span data-i18n="chk_rodilleras">Rodilleras Articuladas (Protección de rótulas)</span></label>
+                    <label><input type="checkbox" id="chk-guantes" data-name="Guantes"> 🧤 <span data-i18n="chk_guantes_dh">Guantes Reforzados de Descenso</span></label>
+                `;
+            }
+        }
+
+        function runSimulation() {
+            document.getElementById('gear-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+
+            let char = document.getElementById('char-icon');
+            let obst = document.getElementById('obst-icon');
+            let msgBox = document.getElementById('result-message');
+
+            if (currentScenario === 'urbano') obst.innerText = '🚗🚪';
+            if (currentScenario === 'ruta') obst.innerText = '🪨🏎️';
+            if (currentScenario === 'downhill') obst.innerText = '🌲🪵';
+
+            obst.classList.add('active');
+            char.className = "character moving";
+            
+            const lang = localStorage.getItem('idioma_preferido') || 'es';
+            msgBox.innerHTML = lang === 'en' ? "<em>Simulating descent... Analyzing individual components...</em>" : "<em>Simulando la bajada... Analizando componentes individuales...</em>";
+
+            setTimeout(() => {
+                obst.classList.remove('active');
+                evaluarResultado();
+            }, 1800);
+        }
+
+        function evaluarResultado() {
+            let char = document.getElementById('char-icon');
+            let msgBox = document.getElementById('result-message');
+            let resultadoHTML = "";
+            const lang = localStorage.getItem('idioma_preferido') || 'es';
+
+            if (currentScenario === 'urbano') {
+                let casco = document.getElementById('chk-casco').checked;
+                let luces = document.getElementById('chk-luces').checked;
+                let guantes = document.getElementById('chk-guantes').checked;
+
+                if (casco && luces && guantes) {
+                    char.className = "character success";
+                    resultadoHTML = lang === 'en' 
+                        ? "🏆 <strong>¡Perfect City Ride (0% Damage)!</strong> You carried the complete kit: lights to be seen, a helmet for any unforeseen event, and gloves for a good grip."
+                        : "🏆 <strong>¡Bajada Perfecta en Ciudad (0% Daño)!</strong> Llevabas el kit completo: luces para que te vean, casco ante cualquier imprevisto y guantes para un buen agarre.";
+                } else {
+                    char.className = "character crash";
+                    let faltantes = [];
+                    if (!casco) faltantes.push(lang === 'en' ? "Helmet (risk of head injury)" : "Casco (riesgo de golpe en la cabeza)");
+                    if (!luces) faltantes.push(lang === 'en' ? "Lights (low visibility for cars)" : "Luces (baja visibilidad para los autos)");
+                    if (!guantes) faltantes.push(lang === 'en' ? "Gloves (abrasion on hands when braking or falling)" : "Guantes (abrasión en manos al frenar o caer)");
+                    
+                    resultadoHTML = lang === 'en'
+                        ? `⚠️ <strong>Urban Incident with injuries:</strong> You suffered an accident in traffic. You missed carrying: <strong>${faltantes.join(" and ")}</strong>. This caused direct damage to unprotected areas of your body.`
+                        : `⚠️ <strong>Incidente Urbano con lesiones:</strong> Sufriste un accidente en el tráfico. Te faltó llevar: <strong>${faltantes.join(" y ")}</strong>. Esto causó daños directos en las zonas desprotegidas de tu cuerpo.`;
+                }
+            } 
+            else if (currentScenario === 'ruta') {
+                let casco = document.getElementById('chk-casco').checked;
+                let gafas = document.getElementById('chk-gafas').checked;
+                let guantes = document.getElementById('chk-guantes').checked;
+                let luces = document.getElementById('chk-luces').checked;
+
+                if (casco && gafas && guantes && luces) {
+                    char.className = "character success";
+                    resultadoHTML = lang === 'en'
+                        ? "🏆 <strong>¡Road Completed Successfully (0% Damage)!</strong> You maintained total control at high speed thanks to your MIPS helmet, protective glasses, gloves, and lights."
+                        : "🏆 <strong>¡Ruta Completada con Éxito (0% Daño)!</strong> Mantuviste el control total a alta velocidad gracias a tu casco MIPS, gafas de protección, guantes y luces.";
+                } else {
+                    char.className = "character crash";
+                    let faltantes = [];
+                    if (!casco) faltantes.push("MIPS Helmet");
+                    if (!gafas) faltantes.push(lang === 'en' ? "Glasses (caused vision loss due to wind/insects)" : "Gafas (provocó pérdida de visión por viento/insectos)");
+                    if (!guantes) faltantes.push("Gloves");
+                    if (!luces) faltantes.push(lang === 'en' ? "Rear lights" : "Luces traseras");
+
+                    resultadoHTML = lang === 'en'
+                        ? `⚠️ <strong>Road Crash:</strong> On a high-speed asphalt descent you had trouble for not carrying: <strong>${faltantes.join(", ")}</strong>, generating specific injuries in unprotected areas.`
+                        : `⚠️ <strong>Caída en Carretera:</strong> En un descenso de asfalto a alta velocidad tuviste problemas por no llevar: <strong>${faltantes.join(", ")}</strong>, generando lesiones específicas en las áreas sin protección.`;
+                }
+            }
+            else if (currentScenario === 'downhill') {
+                let cascoInt = document.getElementById('chk-casco-integral').checked;
+                let peto = document.getElementById('chk-peto').checked;
+                let rodilleras = document.getElementById('chk-rodilleras').checked;
+                let guantes = document.getElementById('chk-guantes').checked;
+
+                if (cascoInt && peto && rodilleras && guantes) {
+                    char.className = "character success";
+                    resultadoHTML = lang === 'en'
+                        ? "🏆 <strong>¡Legendary Downhill Ride (0% Damage)!</strong> You successfully mastered the rock and jump circuit because you had complete gravity gear."
+                        : "🏆 <strong>¡Bajada Legendaria de Downhill (0% Daño)!</strong> Dominaste el circuito de piedras y saltos con éxito porque llevabas todo el equipo de gravedad completo.";
+                } else {
+                    char.className = "character crash";
+                    let faltantes = [];
+                    if (!cascoInt) faltantes.push(lang === 'en' ? "Full Face Helmet (high risk of maxillofacial and cranial injury)" : "Casco Integral (alto riesgo de lesión maxilofacial y craneal)");
+                    if (!peto) faltantes.push(lang === 'en' ? "Body Armor (leaving torso and ribs exposed to rocks)" : "Peto Protector (dejando tu torso y costillas expuestas a rocas)");
+                    if (!rodilleras) faltantes.push(lang === 'en' ? "Knee Pads (leaving your kneecaps unprotected against dry impacts)" : "Rodilleras (dejando tus rótulas desprotegidas ante impactos secos)");
+                    if (!guantes) faltantes.push(lang === 'en' ? "Downhill Gloves (blisters and severe hand cuts)" : "Guantes de descenso (ampollas y cortes severos en manos)");
+
+                    resultadoHTML = lang === 'en'
+                        ? `⚠️ <strong>Severe Impact on the Hill:</strong> Gravity jumps got you. Although you carried some equipment, <strong>you missed: ${faltantes.join("; ")}</strong>. Injuries concentrated precisely on your unprotected body parts.`
+                        : `⚠️ <strong>Impacto Severo en el Cerro:</strong> Te cayeron los saltos de gravedad. Aunque llevabas parte del equipo, <strong>te faltó: ${faltantes.join("; ")}</strong>. Las lesiones se concentraron exactamente en esas partes del cuerpo que ibas sin proteger.`;
+                }
+            }
+
+            msgBox.innerHTML = resultadoHTML;
+        }
+
+        function resetGame() {
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('setup-screen').style.display = 'block';
+            let char = document.getElementById('char-icon');
+            char.className = "character moving";
+        }
+    </script>
+
+    <!-- Script Global de Traducción -->
+    <script src="i18n.js"></script>
+    <script>
+        // Diccionario extendido para esta página
+        if (typeof translations !== 'undefined') {
+            translations.es.juego_meta_titulo = "Simulador de Bajada | Seguridad sobre Ruedas";
+            translations.es.nav_volver_inicio = "Volver al Inicio";
+            translations.es.btn_volver = "← Volver al menú principal";
+            translations.es.juego_titulo = "🎮 Simulador Inteligente de Protección";
+            translations.es.juego_subtitulo = "Selecciona tu equipamiento y comprueba analíticamente qué pasa en cada escenario.";
+            translations.es.juego_elige_escenario = "Elige tu Escenario de Desafío:";
+            translations.es.btn_esc_urbano = "🏙️ Ciclismo Urbano (Tráfico, puertas y visibilidad)";
+            translations.es.btn_esc_ruta = "🛣 Ciclismo de Ruta (Curvas a alta velocidad y asfalto)";
+            translations.es.btn_esc_dh = "⛰️ Downhill Extremo (Rocas, saltos y caídas en cerro)";
+            translations.es.juego_equipamiento = "Equipamiento";
+            translations.es.btn_iniciar_bajada = "¡Iniciar Bajada y Simular! 🚀";
+            translations.es.juego_sim_curso = "📊 Simulación en Curso";
+            translations.es.btn_intentar_otra = "🔄 Intentar otra combinación";
+
+            translations.es.chk_casco_urbano = "Casco Certificado (Protección craneal)";
+            translations.es.chk_luces_urbano = "Luces LED (Visibilidad ante vehículos)";
+            translations.es.chk_guantes_urbano = "Guantes de Ciclismo (Evitan fricción y raspones)";
+            translations.es.chk_casco_ruta = "Casco Aerodinámico MIPS";
+            translations.es.chk_gafas_ruta = "Gafas con Protección UV (Evitan polvo/insectos)";
+            translations.es.chk_guantes_ruta = "Guantes (Agarre y fricción en pavimento)";
+            translations.es.chk_luces_ruta = "Luces Traseras (Seguridad en carretera)";
+            translations.es.chk_casco_int = "Casco Integral / Full Face (Mandíbula y cráneo)";
+            translations.es.chk_peto = "Peto Protector (Torso y columna)";
+            translations.es.chk_rodilleras = "Rodilleras Articuladas (Protección de rótulas)";
+            translations.es.chk_guantes_dh = "Guantes Reforzados de Descenso";
+
+            // Traducciones en Inglés
+            translations.en.juego_meta_titulo = "Descent Simulator | Safety on Wheels";
+            translations.en.nav_volver_inicio = "Back to Home";
+            translations.en.btn_volver = "← Back to Main Menu";
+            translations.en.juego_titulo = "🎮 Smart Protection Simulator";
+            translations.en.juego_subtitulo = "Select your gear and analytically test what happens in each scenario.";
+            translations.en.juego_elige_escenario = "Choose Your Challenge Scenario:";
+            translations.en.btn_esc_urbano = "🏙️ Urban Cycling (Traffic, doors, and visibility)";
+            translations.en.btn_esc_ruta = "🛣 Road Cycling (High-speed curves and asphalt)";
+            translations.en.btn_esc_dh = "⛰️ Extreme Downhill (Rocks, jumps, and hill crashes)";
+            translations.en.juego_equipamiento = "Equipment";
+            translations.en.btn_iniciar_bajada = "Start Descent and Simulate! 🚀";
+            translations.en.juego_sim_curso = "📊 Simulation in Progress";
+            translations.en.btn_intentar_otra = "🔄 Try another combination";
+
+            translations.en.chk_casco_urbano = "Certified Helmet (Head protection)";
+            translations.en.chk_luces_urbano = "LED Lights (Visibility to vehicles)";
+            translations.en.chk_guantes_urbano = "Cycling Gloves (Prevents friction and scrapes)";
+            translations.en.chk_casco_ruta = "MIPS Aerodynamic Helmet";
+            translations.en.chk_gafas_ruta = "UV Protection Glasses (Prevents dust/insects)";
+            translations.en.chk_guantes_ruta = "Gloves (Grip and friction on pavement)";
+            translations.en.chk_luces_ruta = "Rear Lights (Road safety)";
+            translations.en.chk_casco_int = "Full Face Helmet (Jaw and skull)";
+            translations.en.chk_peto = "Body Armor / Jofa (Torso and spine)";
+            translations.en.chk_rodilleras = "Articulated Knee Pads (Kneecap protection)";
+            translations.en.chk_guantes_dh = "Reinforced Downhill Gloves";
+        }
+    </script>
+
+    <footer><p>&copy; 2026 - Conciencia Vial y Ciclística.</p></footer>
+</body>
+</html>

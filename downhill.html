@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="meta_titulo">Downhill y Descenso Extremo | BikeSafety Chile</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background-color: #0b0f19; color: #f8fafc; line-height: 1.6; }
+        header { background: #111827; border-bottom: 1px solid #1f2937; position: fixed; top: 0; width: 100%; z-index: 100; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; padding: 15px 20px; }
+        .logo { font-size: 1.2rem; font-weight: 800; color: #34d399; text-decoration: none; }
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-links { list-style: none; display: flex; gap: 20px; align-items: center; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        .nav-links a:hover { color: #34d399; }
+        .container { max-width: 1000px; margin: 100px auto 40px auto; padding: 0 20px; }
+        .back-link { color: #34d399; text-decoration: none; font-weight: 600; display: inline-block; margin-bottom: 20px; }
+        h1 { font-size: 2.2rem; margin-bottom: 15px; color: #f8fafc; }
+        .content-card { background: #1e293b; padding: 30px; border-radius: 12px; border: 1px solid #334155; margin-bottom: 25px; }
+        .content-card p { margin-bottom: 12px; color: #cbd5e1; font-size: 0.95rem; }
+        .pro-context { font-size: 0.9rem; color: #e2e8f0; background: #0f172a; padding: 15px; border-radius: 6px; border-left: 3px solid #ef4444; margin-top: 20px; }
+        footer { text-align: center; padding: 20px; background: #111827; color: #64748b; font-size: 0.9rem; border-top: 1px solid #1f2937; margin-top: 40px; }
+        
+        /* Estilo para el selector de idioma en el nav */
+        .language-selector select {
+            background: #1f2937;
+            color: white;
+            border: 1px solid #374151;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        @media (max-width: 768px) { .nav-links { display: none; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">🛡️ BikeSafety Chile</a>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html" data-i18n="nav_inicio">Inicio</a></li>
+                    <li><a href="elementos.html" data-i18n="nav_elementos">Elementos</a></li>
+                    <li><a href="precios.html" data-i18n="nav_precios">Precios</a></li>
+                </ul>
+                <div class="language-selector">
+                    <select id="select-idioma" onchange="cambiarIdioma(this.value)">
+                        <option value="es">🇪🇸 ES</option>
+                        <option value="en">🇬🇧 EN</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="back-link" data-i18n="btn_volver">&larr; Volver al menú principal</a>
+        <h1 data-i18n="dh_titulo">Downhill (DH) y Descenso Extremo</h1>
+        
+        <div class="content-card">
+            <p><strong data-i18n="dh_desc_label">Descripción:</strong> <span data-i18n="dh_desc_texto">El Downhill es la máxima expresión de gravedad en el ciclismo de montaña. Consiste en descender cronometrados por pistas naturales o artificiales abruptas plagadas de rocas afiladas, raíces resbaladizas, peraltes pronunciados y saltos con grandes vacíos.</span></p>
+            
+            <p><strong data-i18n="dh_riesgo_label">Nivel de Riesgo:</strong> <span data-i18n="dh_riesgo_texto">Muy Alto. Exige una lectura milimétrica del terreno, reflejos instantáneos y control total de la bicicleta a velocidades superiores a los 70 km/h en bajadas sumamente empinadas.</span></p>
+            
+            <div class="pro-context">
+                🔥 <strong data-i18n="dh_elite_titulo">Información Competitiva de Élite (Copa del Mundo UCI DH y Red Bull Hardline):</strong> 
+                <span data-i18n="dh_elite_texto">En el circuito de la <strong>Copa del Mundo UCI de Downhill</strong>, los riders profesionales compiten al límite contra el reloj en bajadas técnicas brutales. Por otra parte, el <strong>Red Bull Hardline</strong> es considerada la competencia de MTB más peligrosa y extrema del planeta, donde los atletas vuelan más de 20 metros de distancia en cortados gigantescos. En estas instancias, la protección deja de ser opcional: el uso de cascos integrales certificados con tecnología MIPS, rodilleras rígidas y petos o jofas completas (para blindar costillas, hombros y columna vertebral) es el estándar obligatorio para sobrevivir a impactos severos.</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p data-i18n="footer_texto">&copy; 2026 - Conciencia Vial y Ciclística Chile.</p>
+    </footer>
+
+    <!-- Script Global de Traducción -->
+    <script src="i18n.js"></script>
+    <script>
+        // Diccionario extendido exclusivo para esta página (puedes pasarlo también al i18n.js global si prefieres)
+        if (typeof translations !== 'undefined') {
+            translations.es.nav_elementos = "Elementos";
+            translations.es.nav_precios = "Precios";
+            translations.es.btn_volver = "← Volver al menú principal";
+            translations.es.dh_titulo = "Downhill (DH) y Descenso Extremo";
+            translations.es.dh_desc_label = "Descripción:";
+            translations.es.dh_desc_texto = "El Downhill es la máxima expresión de gravedad en el ciclismo de montaña. Consiste en descender cronometrados por pistas naturales o artificiales abruptas plagadas de rocas afiladas, raíces resbaladizas, peraltes pronunciados y saltos con grandes vacíos.";
+            translations.es.dh_riesgo_label = "Nivel de Riesgo:";
+            translations.es.dh_riesgo_texto = "Muy Alto. Exige una lectura milimétrica del terreno, reflejos instantáneos y control total de la bicicleta a velocidades superiores a los 70 km/h en bajadas sumamente empinadas.";
+            translations.es.dh_elite_titulo = "Información Competitiva de Élite (Copa del Mundo UCI DH y Red Bull Hardline):";
+            translations.es.dh_elite_texto = "En el circuito de la Copa del Mundo UCI de Downhill, los riders profesionales compiten al límite contra el reloj en bajadas técnicas brutales. Por otra parte, el Red Bull Hardline es considerada la competencia de MTB más peligrosa y extrema del planeta, donde los atletas vuelan más de 20 metros de distancia en cortados gigantescos. En estas instancias, la protección deja de ser opcional: el uso de cascos integrales certificados con tecnología MIPS, rodilleras rígidas y petos o jofas completas (para blindar costillas, hombros y columna vertebral) es el estándar obligatorio para sobrevivir a impactos severos.";
+            translations.es.footer_texto = "© 2026 - Conciencia Vial y Ciclística Chile.";
+
+            translations.en.nav_elementos = "Gear";
+            translations.en.nav_precios = "Pricing";
+            translations.en.btn_volver = "← Back to Main Menu";
+            translations.en.dh_titulo = "Downhill (DH) and Extreme Descent";
+            translations.en.dh_desc_label = "Description:";
+            translations.en.dh_desc_texto = "Downhill is the ultimate expression of gravity in mountain biking. It consists of timed descents down rugged natural or artificial tracks filled with sharp rocks, slippery roots, steep berms, and massive drop jumps.";
+            translations.en.dh_riesgo_label = "Risk Level:";
+            translations.en.dh_riesgo_texto = "Very High. Requires millimeter terrain reading, split-second reflexes, and total bike control at speeds exceeding 70 km/h on extremely steep downhills.";
+            translations.en.dh_elite_titulo = "Elite Competitive Information (UCI DH World Cup & Red Bull Hardline):";
+            translations.en.dh_elite_texto = "In the UCI Downhill World Cup circuit, professional riders compete at the limit against the clock on brutal technical runs. Meanwhile, Red Bull Hardline is considered the most dangerous and extreme MTB competition on the planet, where athletes fly over 20 meters across gigantic drop-offs. In these settings, protection is no longer optional: using MIPS-certified full-face helmets, rigid knee pads, and full body armor (to shield ribs, shoulders, and spine) is the mandatory standard to survive severe impacts.";
+            translations.en.footer_texto = "© 2026 - Road and Cycling Awareness Chile.";
+        }
+    </script>
+</body>
+</html>

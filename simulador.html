@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="sim_meta_titulo">Simulador Definitivo de DH | BikeSafety Chile</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background-color: #0b0f19; color: #f8fafc; line-height: 1.6; }
+        header { background: #111827; border-bottom: 1px solid #1f2937; position: fixed; top: 0; width: 100%; z-index: 100; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; padding: 15px 20px; }
+        .logo { font-size: 1.2rem; font-weight: 800; color: #34d399; }
+        .nav-links { list-style: none; display: flex; gap: 20px; align-items: center; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        .nav-links a:hover { color: #34d399; }
+        .sim-container {
+            max-width: 900px;
+            margin: 100px auto 40px auto;
+            padding: 0 20px;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: #101932;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .stat-card h4 {
+            color: #94a3b8;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .stat-card span {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .game-console {
+            background: #0b132b;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 25px;
+        }
+        .console-screen {
+            background: #070b19;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 120px;
+            max-height: 180px;
+            overflow-y: auto;
+            color: #e2e8f0;
+            font-family: monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .btn-game {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            text-align: center;
+        }
+        .btn-game:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #60a5fa, #2563eb);
+        }
+        .btn-game.danger {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+        }
+        .btn-game.success {
+            background: linear-gradient(135deg, #10b981, #047857);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+        .shop-slider-container {
+            background: #101932;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: 14px;
+            padding: 24px;
+            position: relative;
+            margin-bottom: 25px;
+        }
+        .slide {
+            display: none;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .slide.active {
+            display: block;
+        }
+        .slide h3 {
+            color: #60a5fa;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+        .slide p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        .slide-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #f59e0b;
+            margin-bottom: 15px;
+        }
+        .slider-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 15px;
+        }
+        .btn-slide {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-slide:hover {
+            background: rgba(59, 130, 246, 0.4);
+            color: white;
+        }
+        .selector-nivel {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+        }
+        .selector-nivel select {
+            background: #070b19;
+            color: white;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .language-selector select {
+            background: #1f2937;
+            color: white;
+            border: 1px solid #374151;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        @media (max-width: 768px) { .nav-links { display: none; } }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">🛡️ BikeSafety Chile</div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html" data-i18n="nav_volver_inicio">Volver al Inicio</a></li>
+                </ul>
+                <div class="language-selector">
+                    <select id="select-idioma" onchange="cambiarIdioma(this.value)">
+                        <option value="es">🇪🇸 ES</option>
+                        <option value="en">🇬🇧 EN</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="sim-container">
+        <a href="index.html" class="back-link" style="display:block; text-align:left; margin-bottom:15px; color: #94a3b8; text-decoration: none;" data-i18n="sim_volver_menu">&larr; Volver al menú principal</a>
+        <h2 data-i18n="sim_titulo">Simulador Definitivo de Descenso (DH)</h2>
+        <p class="section-desc" data-i18n="sim_desc">Desbloquea niveles, adquiere protecciones y bicicletas de gama alta según tu progreso.</p>
+
+        <!-- Panel de Estado -->
+        <div class="dashboard">
+            <div class="stat-card">
+                <h4 data-i18n="stat_dinero">Dinero Actual</h4>
+                <span id="txt-dinero">$50.000 CLP</span>
+            </div>
+            <div class="stat-card">
+                <h4 data-i18n="stat_amateur">Victorias Amateur</h4>
+                <span id="txt-wins-amateur" style="color: #60a5fa;">0 / 10</span>
+            </div>
+            <div class="stat-card">
+                <h4 data-i18n="stat_nacional">Victorias Nacionales</h4>
+                <span id="txt-wins-nacional" style="color: #f59e0b;" data-i18n="stat_bloqueado">Bloqueado</span>
+            </div>
+            <div class="stat-card">
+                <h4 data-i18n="stat_salud">Estado de Salud</h4>
+                <span id="txt-salud" style="color: #10b981;" data-i18n="stat_sano">100% Sano</span>
+            </div>
+        </div>
+
+        <!-- Consola de Juego -->
+        <div class="game-console">
+            <div class="console-screen" id="console-log" data-i18n="console_init">
+                [Sistema]: Empiezas en Nivel Amateur con $50.000 CLP. Gana 10 carreras y compra las 3 protecciones básicas para desbloquear el Nivel Nacional.
+            </div>
+
+            <div class="selector-nivel">
+                <label style="color: #cbd5e1; font-weight: 600;" data-i18n="label_nivel">Nivel de Competencia:</label>
+                <select id="select-nivel">
+                    <option value="amateur" data-i18n="opt_amateur">Amateur (Disponible)</option>
+                    <option value="nacional" id="opt-nacional" disabled data-i18n="opt_nacional">Nacional (Requiere 10 wins Amateur + Equipo Básico)</option>
+                    <option value="mundial" id="opt-mundial" disabled data-i18n="opt_mundial">Mundial (Requiere 15 wins Nacionales + Equipo Intermedio)</option>
+                </select>
+            </div>
+
+            <div class="action-grid">
+                <button class="btn-game" onclick="entrenar()" data-i18n="btn_entrenar">🚴 Entrenar en el Cerro</button>
+                <button class="btn-game success" onclick="competir()" data-i18n="btn_competir">🏁 Competir en el Nivel Elegido</button>
+                <button class="btn-game danger" onclick="visitarHospital()" id="btn-hospital" style="display:none;" data-i18n="btn_hospital">🏥 Ir al Hospital (Curarse)</button>
+            </div>
+        </div>
+
+        <!-- Tienda en Slides -->
+        <div class="shop-slider-container">
+            <h3 style="text-align: center; margin-bottom: 15px; color: #60a5fa;" data-i18n="tienda_titulo">Tienda de Equipamiento y Bicicletas Pro</h3>
+            
+            <!-- Slide 1: Guantes -->
+            <div class="slide active" id="slide-0">
+                <h3 data-i18n="item_guantes_title">Guantes Largos MTB (Amateur)</h3>
+                <p data-i18n="item_guantes_desc">Protección básica para las manos.</p>
+                <div class="slide-price">$20.000 CLP</div>
+                <button class="btn-game" id="btn-guantes" onclick="comprarItem('guantes', 20000)" data-i18n="btn_comprar_guantes">Comprar Guantes</button>
+            </div>
+
+            <!-- Slide 2: Rodilleras -->
+            <div class="slide" id="slide-1">
+                <h3 data-i18n="item_rodilleras_title">Rodilleras Básicas (Amateur)</h3>
+                <p data-i18n="item_rodilleras_desc">Protección básica para rodillas.</p>
+                <div class="slide-price">$35.000 CLP</div>
+                <button class="btn-game" id="btn-rodilleras" onclick="comprarItem('rodilleras', 35000)" data-i18n="btn_comprar_rodilleras">Comprar Rodilleras</button>
+            </div>
+
+            <!-- Slide 3: Casco -->
+            <div class="slide" id="slide-2">
+                <h3 data-i18n="item_casco_title">Casco Integral Básico (Amateur)</h3>
+                <p data-i18n="item_casco_desc">Protección básica para la cabeza.</p>
+                <div class="slide-price">$45.000 CLP</div>
+                <button class="btn-game" id="btn-casco" onclick="comprarItem('casco', 45000)" data-i18n="btn_comprar_casco">Comprar Casco</button>
+            </div>
+
+            <!-- Slide 4: Pechera Intermedia -->
+            <div class="slide" id="slide-3">
+                <h3 data-i18n="item_pechera_title">Pechera Intermedia 🔒 (Nivel Nacional)</h3>
+                <p data-i18n="item_pechera_desc">Se desbloquea al llegar al Nivel Nacional. Protección avanzada de torso.</p>
+                <div class="slide-price">$250.000 CLP</div>
+                <button class="btn-game" id="btn-pecheraIntermedia" onclick="comprarItem('pecheraIntermedia', 250000)" data-i18n="btn_comprar_pechera">Comprar Pechera Intermedia</button>
+            </div>
+
+            <!-- Slide 5: Casco Carbono -->
+            <div class="slide" id="slide-4">
+                <h3 data-i18n="item_cascocarbon_title">Casco de Carbono Pro 🔒 (Nivel Nacional)</h3>
+                <p data-i18n="item_cascocarbon_desc">Se desbloquea en Nivel Nacional. Ultra liviano y seguro.</p>
+                <div class="slide-price">$350.000 CLP</div>
+                <button class="btn-game" id="btn-cascoCarbon" onclick="comprarItem('cascoCarbon', 350000)" data-i18n="btn_comprar_cascocarbon">Comprar Casco Carbón</button>
+            </div>
+
+            <!-- Slide 6: Armadura Mundial -->
+            <div class="slide" id="slide-5">
+                <h3 data-i18n="item_armadura_title">Armadura Integral Mundial 🔒 (Nivel Mundial)</h3>
+                <p data-i18n="item_armadura_desc">Se desbloquea en Nivel Mundial. Máxima tecnología de seguridad corporal.</p>
+                <div class="slide-price">$900.000 CLP</div>
+                <button class="btn-game" id="btn-armaduraMundial" onclick="comprarItem('armaduraMundial', 900000)" data-i18n="btn_comprar_armadura">Comprar Armadura Mundial</button>
+            </div>
+
+            <!-- Slide 7: Pivot Phoenix -->
+            <div class="slide" id="slide-6">
+                <h3 data-i18n="item_pivot_title">Bicicleta Pivot Phoenix 🔒 (Nivel Mundial)</h3>
+                <p data-i18n="item_pivot_desc">Máquina de descenso profesional de alto rendimiento.</p>
+                <div class="slide-price">$5.000.000 CLP</div>
+                <button class="btn-game" id="btn-pivot" onclick="comprarBici('pivot', 5000000)" data-i18n="btn_comprar_pivot">Comprar Pivot Phoenix</button>
+            </div>
+
+            <!-- Slide 8: Commencal V5 -->
+            <div class="slide" id="slide-7">
+                <h3 data-i18n="item_commencal_title">Bicicleta Commencal V5 🔒 (Nivel Mundial)</h3>
+                <p data-i18n="item_commencal_desc">Potencia pura de copa del mundo para arrasar en los cerros.</p>
+                <div class="slide-price">$7.500.000 CLP</div>
+                <button class="btn-game" id="btn-commencal" onclick="comprarBici('commencal', 7500000)" data-i18n="btn_comprar_commencal">Comprar Commencal V5</button>
+            </div>
+
+            <!-- Slide 9: Santa Cruz V10 -->
+            <div class="slide" id="slide-8">
+                <h3 data-i18n="item_santacruz_title">Bicicleta Santa Cruz V10 🔒 (Nivel Mundial)</h3>
+                <p data-i18n="item_santacruz_desc">🌟 La máquina definitiva de DH con suspensión superior y gran reducción de riesgo de caída.</p>
+                <div class="slide-price">$10.000.000 CLP</div>
+                <button class="btn-game" id="btn-santacruz" onclick="comprarBici('santacruz', 10000000)" data-i18n="btn_comprar_santacruz">Comprar Santa Cruz V10</button>
+            </div>
+
+            <!-- Controles del Slide -->
+            <div class="slider-controls">
+                <button class="btn-slide" onclick="cambiarSlide(-1)" data-i18n="btn_anterior">&larr; Anterior</button>
+                <span id="slide-indicator" style="color: #94a3b8; font-size: 0.9rem;">Item 1 de 9</span>
+                <button class="btn-slide" onclick="cambiarSlide(1)" data-i18n="btn_siguiente">Siguiente &rarr;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Global de Traducción y Lógica de Juego -->
+    <script src="i18n.js"></script>
+    <script>
+        // Diccionario extendido para la página del Simulador
+        if (typeof translations !== 'undefined') {
+            translations.es.sim_meta_titulo = "Simulador Definitivo de DH | BikeSafety Chile";
+            translations.es.nav_volver_inicio = "Volver al Inicio";
+            translations.es.sim_volver_menu = "← Volver al menú principal";
+            translations.es.sim_titulo = "Simulador Definitivo de Descenso (DH)";
+            translations.es.sim_desc = "Desbloquea niveles, adquiere protecciones y bicicletas de gama alta según tu progreso.";
+            translations.es.stat_dinero = "Dinero Actual";
+            translations.es.stat_amateur = "Victorias Amateur";
+            translations.es.stat_nacional = "Victorias Nacionales";
+            translations.es.stat_bloqueado = "Bloqueado";
+            translations.es.stat_salud = "Estado de Salud";
+            translations.es.stat_sano = "100% Sano";
+            translations.es.console_init = "[Sistema]: Empiezas en Nivel Amateur con $50.000 CLP. Gana 10 carreras y compra las 3 protecciones básicas para desbloquear el Nivel Nacional.";
+            translations.es.label_nivel = "Nivel de Competencia:";
+            translations.es.opt_amateur = "Amateur (Disponible)";
+            translations.es.opt_nacional = "Nacional (Requiere 10 wins Amateur + Equipo Básico)";
+            translations.es.opt_mundial = "Mundial (Requiere 15 wins Nacionales + Equipo Intermedio)";
+            translations.es.btn_entrenar = "🚴 Entrenar en el Cerro";
+            translations.es.btn_competir = "🏁 Competir en el Nivel Elegido";
+            translations.es.btn_hospital = "🏥 Ir al Hospital (Curarse)";
+            translations.es.tienda_titulo = "Tienda de Equipamiento y Bicicletas Pro";
+            translations.es.item_guantes_title = "Guantes Largos MTB (Amateur)";
+            translations.es.item_guantes_desc = "Protección básica para las manos.";
+            translations.es.btn_comprar_guantes = "Comprar Guantes";
+            translations.es.item_rodilleras_title = "Rodilleras Básicas (Amateur)";
+            translations.es.item_rodilleras_desc = "Protección básica para rodillas.";
+            translations.es.btn_comprar_rodilleras = "Comprar Rodilleras";
+            translations.es.item_casco_title = "Casco Integral Básico (Amateur)";
+            translations.es.item_casco_desc = "Protección básica para la cabeza.";
+            translations.es.btn_comprar_casco = "Comprar Casco";
+            translations.es.item_pechera_title = "Pechera Intermedia 🔒 (Nivel Nacional)";
+            translations.es.item_pechera_desc = "Se desbloquea al llegar al Nivel Nacional. Protección avanzada de torso.";
+            translations.es.btn_comprar_pechera = "Comprar Pechera Intermedia";
+            translations.es.item_cascocarbon_title = "Casco de Carbono Pro 🔒 (Nivel Nacional)";
+            translations.es.item_cascocarbon_desc = "Se desbloquea en Nivel Nacional. Ultra liviano y seguro.";
+            translations.es.btn_comprar_cascocarbon = "Comprar Casco Carbón";
+            translations.es.item_armadura_title = "Armadura Integral Mundial 🔒 (Nivel Mundial)";
+            translations.es.item_armadura_desc = "Se desbloquea en Nivel Mundial. Máxima tecnología de seguridad corporal.";
+            translations.es.btn_comprar_armadura = "Comprar Armadura Mundial";
+            translations.es.item_pivot_title = "Bicicleta Pivot Phoenix 🔒 (Nivel Mundial)";
+            translations.es.item_pivot_desc = "Máquina de descenso profesional de alto rendimiento.";
+            translations.es.btn_comprar_pivot = "Comprar Pivot Phoenix";
+            translations.es.item_commencal_title = "Bicicleta Commencal V5 🔒 (Nivel Mundial)";
+            translations.es.item_commencal_desc = "Potencia pura de copa del mundo para arrasar en los cerros.";
+            translations.es.btn_comprar_commencal = "Comprar Commencal V5";
+            translations.es.item_santacruz_title = "Bicicleta Santa Cruz V10 🔒 (Nivel Mundial)";
+            translations.es.item_santacruz_desc = "🌟 La máquina definitiva de DH con suspensión superior y gran reducción de riesgo de caída.";
+            translations.es.btn_comprar_santacruz = "Comprar Santa Cruz V10";
+            translations.es.btn_anterior = "← Anterior";
+            translations.es.btn_siguiente = "Siguiente →";
+
+            // Traducciones en Inglés
+            translations.en.sim_meta_titulo = "Ultimate DH Simulator | BikeSafety Chile";
+            translations.en.nav_volver_inicio = "Back to Home";
+            translations.en.sim_volver_menu = "← Back to Main Menu";
+            translations.en.sim_titulo = "Ultimate Downhill (DH) Simulator";
+            translations.en.sim_desc = "Unlock levels, acquire gear, and buy high-end bikes based on your progress.";
+            translations.en.stat_dinero = "Current Money";
+            translations.en.stat_amateur = "Amateur Wins";
+            translations.en.stat_nacional = "National Wins";
+            translations.en.stat_bloqueado = "Locked";
+            translations.en.stat_salud = "Health Status";
+            translations.en.stat_sano = "100% Healthy";
+            translations.en.console_init = "[System]: You start at Amateur Level with $50,000 CLP. Win 10 races and buy the 3 basic protections to unlock the National Level.";
+            translations.en.label_nivel = "Competition Level:";
+            translations.en.opt_amateur = "Amateur (Available)";
+            translations.en.opt_nacional = "National (Requires 10 Amateur Wins + Basic Gear)";
+            translations.en.opt_mundial = "World (Requires 15 National Wins + Intermediate Gear)";
+            translations.en.btn_entrenar = "🚴 Train on the Hill";
+            translations.en.btn_competir = "🏁 Compete in Selected Level";
+            translations.en.btn_hospital = "🏥 Go to Hospital (Heal)";
+            translations.en.tienda_titulo = "Gear & Pro Bikes Shop";
+            translations.en.item_guantes_title = "MTB Long Gloves (Amateur)";
+            translations.en.item_guantes_desc = "Basic hand protection.";
+            translations.en.btn_comprar_guantes = "Buy Gloves";
+            translations.en.item_rodilleras_title = "Basic Knee Pads (Amateur)";
+            translations.en.item_rodilleras_desc = "Basic knee protection.";
+            translations.en.btn_comprar_rodilleras = "Buy Knee Pads";
+            translations.en.item_casco_title = "Basic Full-Face Helmet (Amateur)";
+            translations.en.item_casco_desc = "Basic head protection.";
+            translations.en.btn_comprar_casco = "Buy Helmet";
+            translations.en.item_pechera_title = "Intermediate Chest Protector 🔒 (National Level)";
+            translations.en.item_pechera_desc = "Unlocked upon reaching National Level. Advanced torso protection.";
+            translations.en.btn_comprar_pechera = "Buy Chest Protector";
+            translations.en.item_cascocarbon_title = "Pro Carbon Helmet 🔒 (National Level)";
+            translations.en.item_cascocarbon_desc = "Unlocked at National Level. Ultra-lightweight and safe.";
+            translations.en.btn_comprar_cascocarbon = "Buy Carbon Helmet";
+            translations.en.item_armadura_title = "World Full Armor 🔒 (World Level)";
+            translations.en.item_armadura_desc = "Unlocked at World Level. Maximum body protection technology.";
+            translations.en.btn_comprar_armadura = "Buy World Armor";
+            translations.en.item_pivot_title = "Pivot Phoenix Bike 🔒 (World Level)";
+            translations.en.item_pivot_desc = "High-performance professional downhill machine.";
+            translations.en.btn_comprar_pivot = "Buy Pivot Phoenix";
+            translations.en.item_commencal_title = "Commencal V5 Bike 🔒 (World Level)";
+            translations.en.item_commencal_desc = "Pure World Cup power to dominate the trails.";
+            translations.en.btn_comprar_commencal = "Buy Commencal V5";
+            translations.en.item_santacruz_title = "Santa Cruz V10 Bike 🔒 (World Level)";
+            translations.en.item_santacruz_desc = "🌟 The ultimate DH machine with superior suspension and massive crash risk reduction.";
+            translations.en.btn_comprar_santacruz = "Buy Santa Cruz V10";
+            translations.en.btn_anterior = "← Previous";
+            translations.en.btn_siguiente = "Next →";
+        }
+
+        // Lógica de juego del simulador
+        let dinero = 50000;
+        let salud = 100;
+        let winsAmateur = 0;
+        let winsNacional = 0;
+        let nivelNacionalDesbloqueado = false;
+        let nivelMundialDesbloqueado = false;
+        let lesionado = false;
+
+        let inventario = {
+            guantes: false,
+            rodilleras: false,
+            casco: false,
+            pecheraIntermedia: false,
+            cascoCarbon: false,
+            armaduraMundial: false,
+            pivot: false,
+            commencal: false,
+            santacruz: false
+        };
+
+        let slideActual = 0;
+        const totalSlides = 9;
+
+        function actualizarUI() {
+            document.getElementById('txt-dinero').innerText = `$${dinero.toLocaleString('es-CL')} CLP`;
+            document.getElementById('txt-salud').innerText = lesionado ? (currentLang === 'en' ? "Injured 🚑" : "Lesionado 🚑") : (currentLang === 'en' ? `${salud}% Healthy` : `${salud}% Sano`);
+            document.getElementById('txt-salud').style.color = lesionado ? "#ef4444" : "#10b981";
+            document.getElementById('txt-wins-amateur').innerText = `${winsAmateur} / 10`;
+
+            let txtNac = document.getElementById('txt-wins-nacional');
+            if (nivelMundialDesbloqueado) {
+                txtNac.innerText = `${winsNacional} / 15 (${currentLang === 'en' ? 'World OK' : 'Mundial OK'})`;
+            } else if (nivelNacionalDesbloqueado) {
+                txtNac.innerText = `${winsNacional} / 15`;
+            } else {
+                txtNac.innerText = currentLang === 'en' ? "Locked" : "Bloqueado";
+            }
+
+            if (!nivelNacionalDesbloqueado && winsAmateur >= 10 && inventario.guantes && inventario.rodilleras && inventario.casco) {
+                nivelNacionalDesbloqueado = true;
+                document.getElementById('opt-nacional').disabled = false;
+                document.getElementById('opt-nacional').innerText = currentLang === 'en' ? "National (Unlocked!)" : "Nacional (¡Desbloqueado!)";
+                logTextoLimpio(currentLang === 'en' ? "🎉 National Level unlocked! You can now buy intermediate protection in the shop." : "🎉 ¡Nivel Nacional desbloqueado! Ahora puedes comprar protecciones intermedias en la tienda.");
+            }
+
+            if (!nivelMundialDesbloqueado && nivelNacionalDesbloqueado && winsNacional >= 15 && inventario.pecheraIntermedia && inventario.cascoCarbon) {
+                nivelMundialDesbloqueado = true;
+                document.getElementById('opt-mundial').disabled = false;
+                document.getElementById('opt-mundial').innerText = currentLang === 'en' ? "World (Unlocked!)" : "Mundial (¡Desbloqueado!)";
+                logTextoLimpio(currentLang === 'en' ? "🏆 World Level and Pro Bikes unlocked! Go get the Santa Cruz V10." : "🏆 ¡Nivel Mundial y Bicicletas Pro desbloqueadas! Ve por la Santa Cruz V10.");
+            }
+
+            document.getElementById('btn-hospital').style.display = lesionado ? 'block' : 'none';
+
+            for (let item in inventario) {
+                let btn = document.getElementById(`btn-${item}`);
+                if (btn && inventario[item]) {
+                    btn.innerText = currentLang === 'en' ? "Acquired ✓!" : "¡Adquirido ✓!";
+                    btn.disabled = true;
+                    btn.style.background = "#334155";
+                }
+            }
+        }
+
+        function mostrarSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById(`slide-${n}`).classList.add('active');
+            document.getElementById('slide-indicator').innerText = currentLang === 'en' ? `Item ${n + 1} of ${totalSlides}` : `Item ${n + 1} de ${totalSlides}`;
+        }
+
+        function cambiarSlide(dir) {
+            slideActual += dir;
+            if (slideActual >= totalSlides) slideActual = 0;
+            if (slideActual < 0) slideActual = totalSlides - 1;
+            mostrarSlide(slideActual);
+        }
+
+        function logTextoLimpio(texto) {
+            const consoleScreen = document.getElementById('console-log');
+            consoleScreen.innerHTML = `> ${texto}`;
+            consoleScreen.scrollTop = consoleScreen.scrollHeight;
+        }
+
+        function comprarItem(item, costo) {
+            if (lesionado) {
+                logTextoLimpio(currentLang === 'en' ? "⚠️ You are injured. Visit the hospital before buying gear." : "⚠️️ Estás lesionado. Visita el hospital antes de comprar equipo.");
+                return;
+            }
+            if ((item === 'pecheraIntermedia' || item === 'cascoCarbon') && !nivelNacionalDesbloqueado) {
+                logTextoLimpio(currentLang === 'en' ? "🔒 This protection requires unlocking the National Level first." : "🔒 Esta protección requiere desbloquear primero el Nivel Nacional.");
+                return;
+            }
+            if (item === 'armaduraMundial' && !nivelMundialDesbloqueado) {
+                logTextoLimpio(currentLang === 'en' ? "🔒 This protection requires unlocking the World Level first." : "🔒 Esta protección requiere desbloquear primero el Nivel Mundial.");
+                return;
+            }
+
+            if (dinero >= costo) {
+                dinero -= costo;
+                inventario[item] = true;
+                logTextoLimpio(currentLang === 'en' ? `✅ Successfully bought ${item.toUpperCase()}!` : `✅ ¡Compraste ${item.toUpperCase()} con éxito!`);
+                actualizarUI();
+            } else {
+                let falta = costo - dinero;
+                logTextoLimpio(currentLang === 'en' ? `❌ Insufficient funds. You are short $${falta.toLocaleString('es-CL')} CLP.` : `❌ Dinero insuficiente. Te faltan $${falta.toLocaleString('es-CL')} CLP.`);
+            }
+        }
+
+        function comprarBici(bici, costo) {
+            if (lesionado) {
+                logTextoLimpio(currentLang === 'en' ? "⚠️ You are injured. Heal first at the hospital." : "⚠️ Estás lesionado. Cúrate primero en el hospital.");
+                return;
+            }
+            if (!nivelMundialDesbloqueado) {
+                logTextoLimpio(currentLang === 'en' ? "🔒 High-end bikes can only be purchased at the World Level." : "🔒 Las bicicletas de gama alta solo se compran en el Nivel Mundial.");
+                return;
+            }
+            if (dinero >= costo) {
+                dinero -= costo;
+                inventario[bici] = true;
+                if (bici === 'santacruz') {
+                    logTextoLimpio(currentLang === 'en' ? "🌟 YOU ACQUIRED THE SANTA CRUZ V10! Its top-tier suspension drastically reduces injuries, but stay focused on extreme tracks!" : "🌟 ¡ADQUIRISTE LA SANTA CRUZ V10! Su suspensión de alta gama reduce drásticamente las lesiones, ¡pero mantén la concentración en los circuitos extremos!");
+                } else {
+                    logTextoLimpio(currentLang === 'en' ? "🚲 IMPRESSIVE! You acquired the professional bike." : "🚲 ¡IMPRESIONANTE! Adquiriste la bicicleta profesional.");
+                }
+                actualizarUI();
+            } else {
+                let falta = costo - dinero;
+                logTextoLimpio(currentLang === 'en' ? `❌ You don't have enough money for this bike. Short $${falta.toLocaleString('es-CL')} CLP.` : `❌ No tienes suficiente dinero para esta bicicleta. Te faltan $${falta.toLocaleString('es-CL')} CLP.`);
+            }
+        }
+
+        function calcularRiesgo(nivelSeleccionado) {
+            let piezasFaltantes = 0;
+            if (!inventario.guantes) piezasFaltantes++;
+            if (!inventario.rodilleras) piezasFaltantes++;
+            if (!inventario.casco) piezasFaltantes++;
+            if (nivelNacionalDesbloqueado && (!inventario.pecheraIntermedia || !inventario.cascoCarbon)) piezasFaltantes++;
+            if (nivelMundialDesbloqueado && !inventario.armaduraMundial) piezasFaltantes++;
+
+            let bonusBici = 0;
+            if (inventario.santacruz) bonusBici = 0.35;
+            else if (inventario.pivot || inventario.commencal) bonusBici = 0.15;
+
+            let riesgoBase = 0.20 + (piezasFaltantes * 0.12) - bonusBici;
+
+            if (nivelSeleccionado === 'nacional') riesgoBase += 0.10;
+            if (nivelSeleccionado === 'mundial') riesgoBase += 0.25;
+
+            return Math.max(0.03, riesgoBase);
+        }
+
+        function entrenar() {
+            if (lesionado) {
+                logTextoLimpio(currentLang === 'en' ? "⚠️️ You are injured at the hospital. You must heal before training again." : "⚠️ Estás lesionado en el hospital. Debes curarte antes de volver a entrenar.");
+                return;
+            }
+            let riesgo = calcularRiesgo('amateur') - 0.10;
+            if (Math.random() < riesgo) {
+                lesionado = true;
+                logTextoLimpio(currentLang === 'en' ? "💥 Crash while training! Even with a good bike, a bad move injured you." : "💥 ¡Caída entrenando! Incluso con buena bici, un mal movimiento te lesionó.");
+            } else {
+                let ganado = 25000;
+                dinero += ganado;
+                logTextoLimpio(currentLang === 'en' ? `🚴 Training successfully completed. You earned $${ganado.toLocaleString('es-CL')} CLP.` : `🚴 Entrenamiento completado con éxito. Ganaste $${ganado.toLocaleString('es-CL')} CLP.`);
+            }
+            actualizarUI();
+        }
+
+        function competir() {
+            if (lesionado) {
+                logTextoLimpio(currentLang === 'en' ? "⚠️ You are injured, you cannot compete." : "⚠️ Estás lesionado, no puedes competir.");
+                return;
+            }
+
+            let nivel = document.getElementById('select-nivel').value;
+
+            if (nivel === 'nacional' && !nivelNacionalDesbloqueado) {
+                logTextoLimpio(currentLang === 'en' ? "🔒 National Level is locked. Complete the requirements!" : "🔒 El Nivel Nacional está bloqueado. ¡Completa los requisitos!");
+                return;
+            }
+            if (nivel === 'mundial' && !nivelMundialDesbloqueado) {
+                logTextoLimpio(currentLang === 'en' ? "🔒 World Level is locked. Complete the requirements!" : "🔒 El Nivel Mundial está bloqueado. ¡Completa los requisitos!");
+                return;
+            }
+
+            let riesgo = calcularRiesgo(nivel);
+            let premio = 50000;
+
+            if (nivel === 'amateur') premio = 40000;
+            if (nivel === 'nacional') premio = 120000;
+            if (nivel === 'mundial') premio = 450000;
+
+            if (Math.random() < riesgo) {
+                lesionado = true;
+                logTextoLimpio(currentLang === 'en' ? `💥 CRASH AT ${nivel.toUpperCase()} LEVEL! The circuit's demands got the better of you and you suffered an injury.` : `💥 ¡ACCIDENTE EN NIVEL ${nivel.toUpperCase()}! La exigencia del circuito te pasó la cuenta y sufriste una lesión.`);
+            } else {
+                dinero += premio;
+                logTextoLimpio(currentLang === 'en' ? `🏆 VICTORY AT ${nivel.toUpperCase()} LEVEL! You conquered the course and won $${premio.toLocaleString('es-CL')} CLP.` : `🏆 ¡VICTORIA EN NIVEL ${nivel.toUpperCase()}! Conquistaste el circuito y ganaste $${premio.toLocaleString('es-CL')} CLP.`);
+                
+                if (nivel === 'amateur' && !nivelNacionalDesbloqueado) {
+                    winsAmateur++;
+                } else if (nivel === 'nacional' && !nivelMundialDesbloqueado) {
+                    winsNacional++;
+                }
+            }
+            actualizarUI();
+        }
+
+        function visitarHospital() {
+            let costoClinica = 60000;
+            if (dinero >= costoClinica) {
+                dinero -= costoClinica;
+                lesionado = false;
+                logTextoLimpio(currentLang === 'en' ? `🏥 You paid $${costoClinica.toLocaleString('es-CL')} CLP for medical bills and you are now recovered.` : `🏥 Pagaste $${costoClinica.toLocaleString('es-CL')} CLP de clínica y ya estás recuperado.`);
+            } else {
+                dinero = 15000;
+                lesionado = false;
+                logTextoLimpio(currentLang === 'en' ? "🏥 Club friends helped you with medical expenses. You are left with $15,000 CLP." : "🏥 Amigos del club te ayudaron con los gastos médicos. Quedas con $15.000 CLP.");
+            }
+            actualizarUI();
+        }
+    </script>
+</body>
+</html>

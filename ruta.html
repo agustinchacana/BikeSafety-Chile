@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="ruta_meta_titulo">Ciclismo de Ruta y Competición | BikeSafety Chile</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background-color: #0b0f19; color: #f8fafc; line-height: 1.6; }
+        header { background: #111827; border-bottom: 1px solid #1f2937; position: fixed; top: 0; width: 100%; z-index: 100; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; padding: 15px 20px; }
+        .logo { font-size: 1.2rem; font-weight: 800; color: #34d399; }
+        .nav-links { list-style: none; display: flex; gap: 20px; align-items: center; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        .nav-links a:hover { color: #34d399; }
+        .container { max-width: 1000px; margin: 100px auto 40px auto; padding: 0 20px; }
+        .back-link { color: #34d399; text-decoration: none; font-weight: 600; display: inline-block; margin-bottom: 20px; }
+        h1 { font-size: 2.2rem; margin-bottom: 15px; color: #f8fafc; }
+        .content-card { background: #1e293b; padding: 30px; border-radius: 12px; border: 1px solid #334155; margin-bottom: 25px; }
+        .content-card p { margin-bottom: 12px; color: #cbd5e1; font-size: 0.95rem; }
+        .pro-context { font-size: 0.9rem; color: #e2e8f0; background: #0f172a; padding: 15px; border-radius: 6px; border-left: 3px solid #f59e0b; margin-top: 20px; }
+        footer { text-align: center; padding: 20px; background: #111827; color: #64748b; font-size: 0.9rem; border-top: 1px solid #1f2937; margin-top: 40px; }
+        
+        /* Estilo para el selector de idioma */
+        .language-selector select {
+            background: #1f2937;
+            color: white;
+            border: 1px solid #374151;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) { .nav-links { display: none; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">🛡️ BikeSafety Chile</div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html" data-i18n="nav_inicio">Inicio</a></li>
+                    <li><a href="elementos.html" data-i18n="nav_elementos">Elementos</a></li>
+                    <li><a href="precios.html" data-i18n="nav_precios">Precios</a></li>
+                </ul>
+                <div class="language-selector">
+                    <select id="select-idioma" onchange="cambiarIdioma(this.value)">
+                        <option value="es">🇪🇸 ES</option>
+                        <option value="en">🇬🇧 EN</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="back-link" data-i18n="btn_volver">&larr; Volver al menú principal</a>
+        <h1 data-i18n="ruta_titulo">Ciclismo de Ruta y Competición en Carretera</h1>
+        
+        <div class="content-card">
+            <p><strong data-i18n="ruta_desc_label">Descripción:</strong> <span data-i18n="ruta_desc_texto">Disciplina centrada en la velocidad pura y la resistencia aeróbica sobre bicicletas ultraligeras de asfalto, recorriendo largas distancias tanto en llanuras como en puertos de montaña de alta pendiente.</span></p>
+            <p><strong data-i18n="ruta_riesgo_label">Nivel de Riesgo:</strong> <span data-i18n="ruta_riesgo_texto">Alto. Deriva principalmente de las altas velocidades alcanzadas en descensos de carretera (superando los 80-90 km/h) y de rodar en pelotones compactos donde un pequeño roce puede desatar caídas masivas.</span></p>
+            
+            <div class="pro-context">
+                🏆 <strong data-i18n="ruta_elite_titulo">Información Competitiva de Élite (Grandes Vueltas y Campeonato Mundial UCI de Ruta):</strong> 
+                <span data-i18n="ruta_elite_texto">En eventos cumbre como el <strong>Tour de Francia</strong>, el <strong>Giro de Italia</strong> o los Campeonatos Mundiales UCI, los ciclistas profesionales ruedan a promedios de velocidad impresionantes durante etapas de más de 200 kilómetros. La seguridad en ruta exige cascos aerodinámicos ultraventilados con certificación estricta contra impactos de alta energía, guantes de fricción optimizada y lentes de alta protección contra rayos UV y fragmentos de gravilla.</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p data-i18n="footer_ruta">&copy; 2026 - Conciencia Vial y Ciclística Chile.</p>
+    </footer>
+
+    <!-- Script Global de Traducción -->
+    <script src="i18n.js"></script>
+    <script>
+        // Diccionario extendido para la página de Ruta
+        if (typeof translations !== 'undefined') {
+            translations.es.ruta_meta_titulo = "Ciclismo de Ruta y Competición | BikeSafety Chile";
+            translations.es.nav_inicio = "Inicio";
+            translations.es.nav_elementos = "Elementos";
+            translations.es.nav_precios = "Precios";
+            translations.es.btn_volver = "← Volver al menú principal";
+            translations.es.ruta_titulo = "Ciclismo de Ruta y Competición en Carretera";
+            translations.es.ruta_desc_label = "Descripción:";
+            translations.es.ruta_desc_texto = "Disciplina centrada en la velocidad pura y la resistencia aeróbica sobre bicicletas ultraligeras de asfalto, recorriendo largas distancias tanto en llanuras como en puertos de montaña de alta pendiente.";
+            translations.es.ruta_riesgo_label = "Nivel de Riesgo:";
+            translations.es.ruta_riesgo_texto = "Alto. Deriva principalmente de las altas velocidades alcanzadas en descensos de carretera (superando los 80-90 km/h) y de rodar en pelotones compactos donde un pequeño roce puede desatar caídas masivas.";
+            translations.es.ruta_elite_titulo = "Información Competitiva de Élite (Grandes Vueltas y Campeonato Mundial UCI de Ruta):";
+            translations.es.ruta_elite_texto = "En eventos cumbre como el Tour de Francia, el Giro de Italia o los Campeonatos Mundiales UCI, los ciclistas profesionales ruedan a promedios de velocidad impresionantes durante etapas de más de 200 kilómetros. La seguridad en ruta exige cascos aerodinámicos ultraventilados con certificación estricta contra impactos de alta energía, guantes de fricción optimizada y lentes de alta protección contra rayos UV y fragmentos de gravilla.";
+            translations.es.footer_ruta = "© 2026 - Conciencia Vial y Ciclística Chile.";
+
+            // Traducciones en Inglés
+            translations.en.ruta_meta_titulo = "Road Cycling & Competition | BikeSafety Chile";
+            translations.en.nav_inicio = "Home";
+            translations.en.nav_elementos = "Gear";
+            translations.en.nav_precios = "Prices";
+            translations.en.btn_volver = "← Back to Main Menu";
+            translations.en.ruta_titulo = "Road Cycling and Highway Competition";
+            translations.en.ruta_desc_label = "Description:";
+            translations.en.ruta_desc_texto = "A discipline focused on pure speed and aerobic endurance on ultra-lightweight asphalt bicycles, covering long distances across both plains and steep mountain passes.";
+            translations.en.ruta_riesgo_label = "Risk Level:";
+            translations.en.ruta_riesgo_texto = "High. Stemming primarily from high speeds reached on road descents (exceeding 80-90 km/h) and riding in tight pelotons where a minor touch can trigger massive crashes.";
+            translations.en.ruta_elite_titulo = "Elite Competitive Information (Grand Tours and UCI Road World Championship):";
+            translations.en.ruta_elite_texto = "In premier events such as the Tour de France, Giro d'Italia, or UCI World Championships, professional cyclists ride at impressive average speeds during stages over 200 kilometers long. Road safety demands ultra-ventilated aerodynamic helmets with strict certification against high-energy impacts, optimized friction gloves, and high-protection eyewear against UV rays and gravel fragments.";
+            translations.en.footer_ruta = "© 2026 - Road and Cycling Awareness Chile.";
+        }
+    </script>
+</body>
+</html>

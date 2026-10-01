@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="fuentes_meta_titulo">Fuentes de Investigación | Seguridad</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background-color: #0b0f19; color: #f8fafc; line-height: 1.6; }
+        header { background: #111827; border-bottom: 1px solid #1f2937; position: fixed; top: 0; width: 100%; z-index: 100; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; padding: 15px 20px; }
+        .logo { font-size: 1.2rem; font-weight: 800; color: #34d399; text-decoration: none; }
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-links { list-style: none; display: flex; gap: 20px; align-items: center; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        .nav-links a:hover { color: #34d399; }
+        .container { max-width: 1000px; margin: 100px auto 40px auto; padding: 0 20px; }
+        .back-link { color: #34d399; text-decoration: none; font-weight: 600; display: inline-block; margin-bottom: 20px; }
+        h2 { font-size: 2.2rem; margin-bottom: 10px; color: #f8fafc; }
+        .section-desc { color: #94a3b8; margin-bottom: 30px; font-size: 1rem; }
+        
+        .fuentes-box {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+        }
+        .fuentes-box ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .fuentes-box li {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+        .fuentes-box a {
+            color: #34d399;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .fuentes-box a:hover {
+            text-decoration: underline;
+        }
+
+        /* Estilo para el selector de idioma en el nav */
+        .language-selector select {
+            background: #1f2937;
+            color: white;
+            border: 1px solid #374151;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        footer { text-align: center; padding: 20px; background: #111827; color: #64748b; font-size: 0.9rem; border-top: 1px solid #1f2937; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">🛡️ BikeSafety Chile</a>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html" data-i18n="nav_volver_inicio">Volver al Inicio</a></li>
+                </ul>
+                <div class="language-selector">
+                    <select id="select-idioma" onchange="cambiarIdioma(this.value)">
+                        <option value="es">🇪🇸 ES</option>
+                        <option value="en">🇬🇧 EN</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container" style="margin-top: 100px; text-align: left;">
+        <a href="index.html" class="back-link" data-i18n="btn_volver">&larr; Volver al menú principal</a>
+        <h2 data-i18n="fuentes_titulo">Fuentes de Investigación y Referencias</h2>
+        <p class="section-desc" data-i18n="fuentes_subtitulo">Respaldado por instituciones oficiales de seguridad vial y deportiva.</p>
+        
+        <div class="fuentes-box">
+            <ul>
+                <li>
+                    <strong data-i18n="fuente_1_titulo">1. CONASET (Comisión Nacional de Seguridad de Tránsito, Chile):</strong> 
+                    <a href="https://www.conaset.cl" target="_blank" data-i18n="fuente_1_link">Visitar Conaset.cl</a> 
+                    <span data-i18n="fuente_1_desc">Informes estadísticos de siniestralidad vial y normativas de tránsito para ciclistas.</span>
+                </li>
+                <li>
+                    <strong data-i18n="fuente_2_titulo">2. Estudios de Ingeniería Biomecánica (MIPS Safety Systems):</strong> 
+                    <a href="https://mipsprotection.com" target="_blank" data-i18n="fuente_2_link">Visitar MipsProtection.com</a> 
+                    <span data-i18n="fuente_2_desc">Datos técnicos sobre la reducción de fuerzas rotacionales en lesiones cerebrales.</span>
+                </li>
+                <li>
+                    <strong data-i18n="fuente_3_titulo">3. Marcas Especializadas (Fox Racing):</strong> 
+                    <a href="https://www.foxracing.com" target="_blank" data-i18n="fuente_3_link">Visitar FoxRacing.com</a> 
+                    <span data-i18n="fuente_3_desc">Especificaciones técnicas sobre protección articular y resistencia a la abrasión.</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p data-i18n="footer_texto_gen">&copy; 2026 - Conciencia Vial y Ciclística.</p>
+    </footer>
+
+    <!-- Script Global de Traducción -->
+    <script src="i18n.js"></script>
+    <script>
+        // Diccionario extendido para esta página
+        if (typeof translations !== 'undefined') {
+            translations.es.fuentes_meta_titulo = "Fuentes de Investigación | Seguridad";
+            translations.es.nav_volver_inicio = "Volver al Inicio";
+            translations.es.btn_volver = "← Volver al menú principal";
+            translations.es.fuentes_titulo = "Fuentes de Investigación y Referencias";
+            translations.es.fuentes_subtitulo = "Respaldado por instituciones oficiales de seguridad vial y deportiva.";
+            
+            translations.es.fuente_1_titulo = "1. CONASET (Comisión Nacional de Seguridad de Tránsito, Chile):";
+            translations.es.fuente_1_link = "Visitar Conaset.cl";
+            translations.es.fuente_1_desc = "Informes estadísticos de siniestralidad vial y normativas de tránsito para ciclistas.";
+            
+            translations.es.fuente_2_titulo = "2. Estudios de Ingeniería Biomecánica (MIPS Safety Systems):";
+            translations.es.fuente_2_link = "Visitar MipsProtection.com";
+            translations.es.fuente_2_desc = "Datos técnicos sobre la reducción de fuerzas rotacionales en lesiones cerebrales.";
+            
+            translations.es.fuente_3_titulo = "3. Marcas Especializadas (Fox Racing):";
+            translations.es.fuente_3_link = "Visitar FoxRacing.com";
+            translations.es.fuente_3_desc = "Especificaciones técnicas sobre protección articular y resistencia a la abrasión.";
+            
+            translations.es.footer_texto_gen = "© 2026 - Conciencia Vial y Ciclística.";
+
+            translations.en.fuentes_meta_titulo = "Research Sources | Safety";
+            translations.en.nav_volver_inicio = "Back to Home";
+            translations.en.btn_volver = "← Back to Main Menu";
+            translations.en.fuentes_titulo = "Research Sources and References";
+            translations.en.fuentes_subtitulo = "Backed by official road and sports safety institutions.";
+            
+            translations.en.fuente_1_titulo = "1. CONASET (National Traffic Safety Commission, Chile):";
+            translations.en.fuente_1_link = "Visit Conaset.cl";
+            translations.en.fuente_1_desc = "Statistical reports on road accidents and traffic regulations for cyclists.";
+            
+            translations.en.fuente_2_titulo = "2. Biomechanical Engineering Studies (MIPS Safety Systems):";
+            translations.en.fuente_2_link = "Visit MipsProtection.com";
+            translations.en.fuente_2_desc = "Technical data on the reduction of rotational forces in brain injuries.";
+            
+            translations.en.fuente_3_titulo = "3. Specialized Brands (Fox Racing):";
+            translations.en.fuente_3_link = "Visit FoxRacing.com";
+            translations.en.fuente_3_desc = "Technical specifications on joint protection and abrasion resistance.";
+            
+            translations.en.footer_texto_gen = "© 2026 - Road and Cycling Awareness.";
+        }
+    </script>
+</body>
+</html>

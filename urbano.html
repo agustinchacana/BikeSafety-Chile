@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="urbano_meta_titulo">Ciclismo Urbano y Seguridad Vial | BikeSafety Chile</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background-color: #0b0f19; color: #f8fafc; line-height: 1.6; }
+        header { background: #111827; border-bottom: 1px solid #1f2937; position: fixed; top: 0; width: 100%; z-index: 100; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; max-width: 1100px; margin: 0 auto; padding: 15px 20px; }
+        .logo { font-size: 1.2rem; font-weight: 800; color: #34d399; }
+        .nav-links { list-style: none; display: flex; gap: 20px; align-items: center; }
+        .nav-links a { color: #94a3b8; text-decoration: none; font-weight: 600; transition: color 0.3s; }
+        .nav-links a:hover { color: #34d399; }
+        .container { max-width: 1000px; margin: 100px auto 40px auto; padding: 0 20px; }
+        .back-link { color: #34d399; text-decoration: none; font-weight: 600; display: inline-block; margin-bottom: 20px; }
+        h1 { font-size: 2.2rem; margin-bottom: 15px; color: #f8fafc; }
+        .content-card { background: #1e293b; padding: 30px; border-radius: 12px; border: 1px solid #334155; margin-bottom: 25px; }
+        .content-card p { margin-bottom: 12px; color: #cbd5e1; font-size: 0.95rem; }
+        .pro-context { font-size: 0.9rem; color: #e2e8f0; background: #0f172a; padding: 15px; border-radius: 6px; border-left: 3px solid #34d399; margin-top: 20px; }
+        footer { text-align: center; padding: 20px; background: #111827; color: #64748b; font-size: 0.9rem; border-top: 1px solid #1f2937; margin-top: 40px; }
+        
+        /* Estilo para el selector de idioma */
+        .language-selector select {
+            background: #1f2937;
+            color: white;
+            border: 1px solid #374151;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) { .nav-links { display: none; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">🛡️ BikeSafety Chile</div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html" data-i18n="nav_inicio">Inicio</a></li>
+                    <li><a href="elementos.html" data-i18n="nav_elementos">Elementos</a></li>
+                    <li><a href="precios.html" data-i18n="nav_precios">Precios</a></li>
+                </ul>
+                <div class="language-selector">
+                    <select id="select-idioma" onchange="cambiarIdioma(this.value)">
+                        <option value="es">🇪🇸 ES</option>
+                        <option value="en">🇬🇧 EN</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="back-link" data-i18n="btn_volver">&larr; Volver al menú principal</a>
+        <h1 data-i18n="urbano_titulo">Ciclismo Urbano y Movilidad Sostenible</h1>
+        
+        <div class="content-card">
+            <p><strong data-i18n="urbano_desc_label">Descripción:</strong> <span data-i18n="urbano_desc_texto">El ciclismo urbano abarca los desplazamientos cotidianos al trabajo, estudio o trámites utilizando calles, avenidas y la red de ciclovías compartidas con peatones y vehículos motorizados pesados.</span></p>
+            <p><strong data-i18n="urbano_riesgo_label">Nivel de Riesgo:</strong> <span data-i18n="urbano_riesgo_texto">Moderado a Alto. Aunque no implica saltos de gran altura, el peligro proviene de factores externos como la imprudencia vial, los puntos ciegos de buses y automóviles, y las superficies urbanas deslizantes (rieles, tapas de alcantarilla o pavimento mojado).</span></p>
+            
+            <div class="pro-context">
+                🏙️ <strong data-i18n="urbano_normativa_titulo">Contexto Normativo y Cultura Urbana de Alto Rendimiento:</strong> 
+                <span data-i18n="urbano_normativa_texto">En Chile, esta disciplina se rige de forma estricta por la <strong>Ley de Convivencia Vial</strong>. A nivel internacional, urbes con cultura ciclista avanzada (como Copenhague o Ámsterdam) demuestran que la seguridad urbana se basa en infraestructura dedicada y "visibilidad activa". El uso obligatorio de luces LED intermitentes de alta intensidad (delantera blanca y trasera roja) y un casco urbano certificado con elementos reflectantes es vital para evitar siniestros viales en trayectos nocturnos o con neblina densa.</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p data-i18n="footer_urbano">&copy; 2026 - Conciencia Vial y Ciclística Chile.</p>
+    </footer>
+
+    <!-- Script Global de Traducción -->
+    <script src="i18n.js"></script>
+    <script>
+        // Diccionario extendido para la página de Ciclismo Urbano
+        if (typeof translations !== 'undefined') {
+            translations.es.urbano_meta_titulo = "Ciclismo Urbano y Seguridad Vial | BikeSafety Chile";
+            translations.es.nav_inicio = "Inicio";
+            translations.es.nav_elementos = "Elementos";
+            translations.es.nav_precios = "Precios";
+            translations.es.btn_volver = "← Volver al menú principal";
+            translations.es.urbano_titulo = "Ciclismo Urbano y Movilidad Sostenible";
+            translations.es.urbano_desc_label = "Descripción:";
+            translations.es.urbano_desc_texto = "El ciclismo urbano abarca los desplazamientos cotidianos al trabajo, estudio o trámites utilizando calles, avenidas y la red de ciclovías compartidas con peatones y vehículos motorizados pesados.";
+            translations.es.urbano_riesgo_label = "Nivel de Riesgo:";
+            translations.es.urbano_riesgo_texto = "Moderado a Alto. Aunque no implica saltos de gran altura, el peligro proviene de factores externos como la imprudencia vial, los puntos ciegos de buses y automóviles, y las superficies urbanas deslizantes (rieles, tapas de alcantarilla o pavimento mojado).";
+            translations.es.urbano_normativa_titulo = "Contexto Normativo y Cultura Urbana de Alto Rendimiento:";
+            translations.es.urbano_normativa_texto = "En Chile, esta disciplina se rige de forma estricta por la Ley de Convivencia Vial. A nivel internacional, urbes con cultura ciclista avanzada (como Copenhague o Ámsterdam) demuestran que la seguridad urbana se basa en infraestructura dedicada y \"visibilidad activa\". El uso obligatorio de luces LED intermitentes de alta intensidad (delantera blanca y trasera roja) y un casco urbano certificado con elementos reflectantes es vital para evitar siniestros viales en trayectos nocturnos o con neblina densa.";
+            translations.es.footer_urbano = "© 2026 - Conciencia Vial y Ciclística Chile.";
+
+            // Traducciones en Inglés
+            translations.en.urbano_meta_titulo = "Urban Cycling & Road Safety | BikeSafety Chile";
+            translations.en.nav_inicio = "Home";
+            translations.en.nav_elementos = "Gear";
+            translations.en.nav_precios = "Prices";
+            translations.en.btn_volver = "← Back to Main Menu";
+            translations.en.urbano_titulo = "Urban Cycling and Sustainable Mobility";
+            translations.en.urbano_desc_label = "Description:";
+            translations.en.urbano_desc_texto = "Urban cycling covers daily commutes to work, study, or errands using streets, avenues, and bike lanes shared with pedestrians and heavy motor vehicles.";
+            translations.en.urbano_riesgo_label = "Risk Level:";
+            translations.en.urbano_riesgo_texto = "Moderate to High. Although it does not involve high-altitude jumps, danger comes from external factors such as road recklessness, blind spots of buses and cars, and slippery urban surfaces (rails, manhole covers, or wet pavement).";
+            translations.en.urbano_normativa_titulo = "Regulatory Context and High-Performance Urban Culture:";
+            translations.en.urbano_normativa_texto = "In Chile, this discipline is strictly governed by the Traffic Coexistence Law (Ley de Convivencia Vial). Internationally, cities with advanced cycling culture (such as Copenhagen or Amsterdam) demonstrate that urban safety relies on dedicated infrastructure and 'active visibility'. The mandatory use of high-intensity flashing LED lights (white front and red rear) and a certified urban helmet with reflective elements is vital to prevent road accidents during nighttime commutes or dense fog.";
+            translations.en.footer_urbano = "© 2026 - Road and Cycling Awareness Chile.";
+        }
+    </script>
+</body>
+</html>

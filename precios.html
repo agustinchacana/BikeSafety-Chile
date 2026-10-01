@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="precios_meta_titulo">Comparativa de Precios | Chile</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos directos exclusivos para asegurar que la tabla y sus enlaces queden perfectos */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 25px;
+            background: #101932;
+            border-radius: 14px;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        .table-responsive table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+        .table-responsive th, .table-responsive td {
+            padding: 18px 22px !important;
+            text-align: left !important;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.25) !important;
+        }
+        .table-responsive th {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(16, 185, 129, 0.15)) !important;
+            color: #60a5fa !important;
+            font-weight: 800 !important;
+            font-size: 0.95rem !important;
+            text-transform: uppercase !important;
+        }
+        .table-responsive td {
+            color: #ffffff !important;
+            font-size: 0.95rem !important;
+        }
+        .table-responsive tr:hover td {
+            background-color: #172544 !important;
+        }
+        /* Corrección clave para los links de las tiendas dentro de los títulos */
+        .table-responsive th a.store-link {
+            color: #93c5fd !important;
+            font-size: 0.8rem !important;
+            font-weight: 400 !important;
+            text-decoration: underline !important;
+            display: inline-block !important;
+            margin-top: 4px !important;
+        }
+        .table-responsive th a.store-link:hover {
+            color: #ffffff !important;
+        }
+
+        /* Estilo para el selector de idioma en el nav */
+        .language-selector select {
+            background: #1f2937;
+            color: white;
+            border: 1px solid #374151;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">🛡️ BikeSafety Chile</div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="index.html" data-i18n="nav_volver_inicio">Volver al Inicio</a></li>
+                </ul>
+                <div class="language-selector">
+                    <select id="select-idioma" onchange="cambiarIdioma(this.value)">
+                        <option value="es">🇪🇸 ES</option>
+                        <option value="en">🇬🇧 EN</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container" style="margin-top: 100px;">
+        <a href="index.html" class="back-link" style="display:block; text-align:left; margin-bottom:15px; color: #94a3b8; text-decoration: none;" data-i18n="btn_volver">&larr; Volver al menú principal</a>
+        <h2 data-i18n="precios_titulo">Comparativa de Precios en Tiendas (Chile)</h2>
+        <p class="section-desc" data-i18n="precios_subtitulo">Valores reales recopilados en tiendas especializadas nacionales.</p>
+        
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th data-i18n="th_elemento">Elemento de Seguridad</th>
+                        <th>Trailstore <br><a href="https://www.trailstore.cl" target="_blank" class="store-link" data-i18n="visitar_trailstore">Visitar Trailstore.cl</a></th>
+                        <th>Ride Shop <br><a href="https://www.rideshop.cl" target="_blank" class="store-link" data-i18n="visitar_rideshop">Visitar RideShop.cl</a></th>
+                        <th>MercadoLibre <br><a href="https://www.mercadolibre.cl" target="_blank" class="store-link" data-i18n="visitar_ml">Visitar MercadoLibre.cl</a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong data-i18n="item_casco_dh">Casco Integral MTB (Downhill)</strong></td>
+                        <td>$249.990 CLP</td>
+                        <td>$219.990 CLP</td>
+                        <td>$159.990 CLP</td>
+                    </tr>
+                    <tr>
+                        <td><strong data-i18n="item_casco_mips">Casco Ruta / Urbano MIPS</strong></td>
+                        <td>$89.990 CLP</td>
+                        <td>$79.990 CLP</td>
+                        <td>$54.990 CLP</td>
+                    </tr>
+                    <tr>
+                        <td><strong data-i18n="item_guantes">Guantes Largos MTB</strong></td>
+                        <td>$34.990 CLP</td>
+                        <td>$29.990 CLP</td>
+                        <td>$18.990 CLP</td>
+                    </tr>
+                    <tr>
+                        <td><strong data-i18n="item_rodilleras">Rodilleras Enduro Articuladas</strong></td>
+                        <td>$59.990 CLP</td>
+                        <td>$49.990 CLP</td>
+                        <td>$34.990 CLP</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer><p data-i18n="footer_texto_gen">&copy; 2026 - Conciencia Vial y Ciclística.</p></footer>
+
+    <!-- Script Global de Traducción -->
+    <script src="i18n.js"></script>
+    <script>
+        // Diccionario extendido para esta página
+        if (typeof translations !== 'undefined') {
+            translations.es.precios_meta_titulo = "Comparativa de Precios | Chile";
+            translations.es.nav_volver_inicio = "Volver al Inicio";
+            translations.es.btn_volver = "← Volver al menú principal";
+            translations.es.precios_titulo = "Comparativa de Precios en Tiendas (Chile)";
+            translations.es.precios_subtitulo = "Valores reales recopilados en tiendas especializadas nacionales.";
+            
+            translations.es.th_elemento = "Elemento de Seguridad";
+            translations.es.visitar_trailstore = "Visitar Trailstore.cl";
+            translations.es.visitar_rideshop = "Visitar RideShop.cl";
+            translations.es.visitar_ml = "Visitar MercadoLibre.cl";
+            
+            translations.es.item_casco_dh = "Casco Integral MTB (Downhill)";
+            translations.es.item_casco_mips = "Casco Ruta / Urbano MIPS";
+            translations.es.item_guantes = "Guantes Largos MTB";
+            translations.es.item_rodilleras = "Rodilleras Enduro Articuladas";
+            translations.es.footer_texto_gen = "© 2026 - Conciencia Vial y Ciclística.";
+
+            // Traducciones en Inglés
+            translations.en.precios_meta_titulo = "Price Comparison | Chile";
+            translations.en.nav_volver_inicio = "Back to Home";
+            translations.en.btn_volver = "← Back to Main Menu";
+            translations.en.precios_titulo = "Store Price Comparison (Chile)";
+            translations.en.precios_subtitulo = "Real values collected from specialized national stores.";
+            
+            translations.en.th_elemento = "Safety Gear";
+            translations.en.visitar_trailstore = "Visit Trailstore.cl";
+            translations.en.visitar_rideshop = "Visit RideShop.cl";
+            translations.en.visitar_ml = "Visit MercadoLibre.cl";
+            
+            translations.en.item_casco_dh = "MTB Full Face Helmet (Downhill)";
+            translations.en.item_casco_mips = "Road / Urban MIPS Helmet";
+            translations.en.item_guantes = "MTB Long Gloves";
+            translations.en.item_rodilleras = "Articulated Enduro Knee Pads";
+            translations.en.footer_texto_gen = "© 2026 - Road and Cycling Awareness.";
+        }
+    </script>
+</body>
+</html>
