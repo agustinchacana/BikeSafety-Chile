@@ -185,7 +185,7 @@
 <body>
     <header>
         <nav class="navbar">
-            <div class="logo">🛡️️ BikeSafety Chile</div>
+            <div class="logo">🛡 BikeSafety Chile</div>
             <div class="nav-right">
                 <ul class="nav-links">
                     <li><a href="index.html" data-i18n="nav_volver_inicio">Volver al Inicio</a></li>
@@ -335,14 +335,21 @@
     <!-- Script Global de Traducción y Lógica de Juego -->
     <script src="i18n.js"></script>
     <script>
-        // Declaración de seguridad para que currentLang nunca dé error de referencia
-        let currentLang = 'es';
-        if (typeof window.currentLang !== 'undefined') {
-            currentLang = window.currentLang;
+        // Declaración robusta que evita errores si i18n.js la maneja o no
+        if (typeof window.currentLang === 'undefined') {
+            window.currentLang = 'es';
+        }
+        
+        // Función auxiliar segura para obtener el idioma actual sin fallos de scope
+        function getLang() {
+            return window.currentLang || 'es';
         }
 
         // Diccionario extendido para la página del Simulador
         if (typeof translations !== 'undefined') {
+            if(!translations.es) translations.es = {};
+            if(!translations.en) translations.en = {};
+
             translations.es.sim_meta_titulo = "Simulador Definitivo de DH | BikeSafety Chile";
             translations.es.nav_volver_inicio = "Volver al Inicio";
             translations.es.sim_volver_menu = "← Volver al menú principal";
@@ -470,32 +477,33 @@
         const totalSlides = 9;
 
         function actualizarUI() {
+            let lang = getLang();
             document.getElementById('txt-dinero').innerText = `$${dinero.toLocaleString('es-CL')} CLP`;
-            document.getElementById('txt-salud').innerText = lesionado ? (currentLang === 'en' ? "Injured 🚑" : "Lesionado 🚑") : (currentLang === 'en' ? `${salud}% Healthy` : `${salud}% Sano`);
+            document.getElementById('txt-salud').innerText = lesionado ? (lang === 'en' ? "Injured 🚑" : "Lesionado 🚑") : (lang === 'en' ? `${salud}% Healthy` : `${salud}% Sano`);
             document.getElementById('txt-salud').style.color = lesionado ? "#ef4444" : "#10b981";
             document.getElementById('txt-wins-amateur').innerText = `${winsAmateur} / 10`;
 
             let txtNac = document.getElementById('txt-wins-nacional');
             if (nivelMundialDesbloqueado) {
-                txtNac.innerText = `${winsNacional} / 15 (${currentLang === 'en' ? 'World OK' : 'Mundial OK'})`;
+                txtNac.innerText = `${winsNacional} / 15 (${lang === 'en' ? 'World OK' : 'Mundial OK'})`;
             } else if (nivelNacionalDesbloqueado) {
                 txtNac.innerText = `${winsNacional} / 15`;
             } else {
-                txtNac.innerText = currentLang === 'en' ? "Locked" : "Bloqueado";
+                txtNac.innerText = lang === 'en' ? "Locked" : "Bloqueado";
             }
 
             if (!nivelNacionalDesbloqueado && winsAmateur >= 10 && inventario.guantes && inventario.rodilleras && inventario.casco) {
                 nivelNacionalDesbloqueado = true;
                 document.getElementById('opt-nacional').disabled = false;
-                document.getElementById('opt-nacional').innerText = currentLang === 'en' ? "National (Unlocked!)" : "Nacional (¡Desbloqueado!)";
-                logTextoLimpio(currentLang === 'en' ? "🎉 National Level unlocked! You can now buy intermediate protection in the shop." : "🎉 ¡Nivel Nacional desbloqueado! Ahora puedes comprar protecciones intermedias en la tienda.");
+                document.getElementById('opt-nacional').innerText = lang === 'en' ? "National (Unlocked!)" : "Nacional (¡Desbloqueado!)";
+                logTextoLimpio(lang === 'en' ? "🎉 National Level unlocked! You can now buy intermediate protection in the shop." : "🎉 ¡Nivel Nacional desbloqueado! Ahora puedes comprar protecciones intermedias en la tienda.");
             }
 
             if (!nivelMundialDesbloqueado && nivelNacionalDesbloqueado && winsNacional >= 15 && inventario.pecheraIntermedia && inventario.cascoCarbon) {
                 nivelMundialDesbloqueado = true;
                 document.getElementById('opt-mundial').disabled = false;
-                document.getElementById('opt-mundial').innerText = currentLang === 'en' ? "World (Unlocked!)" : "Mundial (¡Desbloqueado!)";
-                logTextoLimpio(currentLang === 'en' ? "🏆 World Level and Pro Bikes unlocked! Go get the Santa Cruz V10." : "🏆 ¡Nivel Mundial y Bicicletas Pro desbloqueadas! Ve por la Santa Cruz V10.");
+                document.getElementById('opt-mundial').innerText = lang === 'en' ? "World (Unlocked!)" : "Mundial (¡Desbloqueado!)";
+                logTextoLimpio(lang === 'en' ? "🏆 World Level and Pro Bikes unlocked! Go get the Santa Cruz V10." : "🏆 ¡Nivel Mundial y Bicicletas Pro desbloqueadas! Ve por la Santa Cruz V10.");
             }
 
             document.getElementById('btn-hospital').style.display = lesionado ? 'block' : 'none';
@@ -503,7 +511,7 @@
             for (let item in inventario) {
                 let btn = document.getElementById(`btn-${item}`);
                 if (btn && inventario[item]) {
-                    btn.innerText = currentLang === 'en' ? "Acquired ✓!" : "¡Adquirido ✓!";
+                    btn.innerText = lang === 'en' ? "Acquired ✓!" : "¡Adquirido ✓!";
                     btn.disabled = true;
                     btn.style.background = "#334155";
                 }
@@ -511,9 +519,10 @@
         }
 
         function mostrarSlide(n) {
+            let lang = getLang();
             document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
             document.getElementById(`slide-${n}`).classList.add('active');
-            document.getElementById('slide-indicator').innerText = currentLang === 'en' ? `Item ${n + 1} of ${totalSlides}` : `Item ${n + 1} de ${totalSlides}`;
+            document.getElementById('slide-indicator').innerText = lang === 'en' ? `Item ${n + 1} of ${totalSlides}` : `Item ${n + 1} de ${totalSlides}`;
         }
 
         function cambiarSlide(dir) {
@@ -530,51 +539,53 @@
         }
 
         function comprarItem(item, costo) {
+            let lang = getLang();
             if (lesionado) {
-                logTextoLimpio(currentLang === 'en' ? "⚠️ You are injured. Visit the hospital before buying gear." : "⚠ Estás lesionado. Visita el hospital antes de comprar equipo.");
+                logTextoLimpio(lang === 'en' ? "⚠️ You are injured. Visit the hospital before buying gear." : "⚠ Estás lesionado. Visita el hospital antes de comprar equipo.");
                 return;
             }
             if ((item === 'pecheraIntermedia' || item === 'cascoCarbon') && !nivelNacionalDesbloqueado) {
-                logTextoLimpio(currentLang === 'en' ? "🔒 This protection requires unlocking the National Level first." : "🔒 Esta protección requiere desbloquear primero el Nivel Nacional.");
+                logTextoLimpio(lang === 'en' ? "🔒 This protection requires unlocking the National Level first." : "🔒 Esta protección requiere desbloquear primero el Nivel Nacional.");
                 return;
             }
             if (item === 'armaduraMundial' && !nivelMundialDesbloqueado) {
-                logTextoLimpio(currentLang === 'en' ? "🔒 This protection requires unlocking the World Level first." : "🔒 Esta protección requiere desbloquear primero el Nivel Mundial.");
+                logTextoLimpio(lang === 'en' ? "🔒 This protection requires unlocking the World Level first." : "🔒 Esta protección requiere desbloquear primero el Nivel Mundial.");
                 return;
             }
 
             if (dinero >= costo) {
                 dinero -= costo;
                 inventario[item] = true;
-                logTextoLimpio(currentLang === 'en' ? `✅ Successfully bought ${item.toUpperCase()}!` : `✅ ¡Compraste ${item.toUpperCase()} con éxito!`);
+                logTextoLimpio(lang === 'en' ? `✅ Successfully bought ${item.toUpperCase()}!` : `✅ ¡Compraste ${item.toUpperCase()} con éxito!`);
                 actualizarUI();
             } else {
                 let falta = costo - dinero;
-                logTextoLimpio(currentLang === 'en' ? `❌ Insufficient funds. You are short $${falta.toLocaleString('es-CL')} CLP.` : `❌ Dinero insuficiente. Te faltan $${falta.toLocaleString('es-CL')} CLP.`);
+                logTextoLimpio(lang === 'en' ? `❌ Insufficient funds. You are short $${falta.toLocaleString('es-CL')} CLP.` : `❌ Dinero insuficiente. Te faltan $${falta.toLocaleString('es-CL')} CLP.`);
             }
         }
 
         function comprarBici(bici, costo) {
+            let lang = getLang();
             if (lesionado) {
-                logTextoLimpio(currentLang === 'en' ? "⚠️ You are injured. Heal first at the hospital." : "⚠️ Estás lesionado. Cúrate primero en el hospital.");
+                logTextoLimpio(lang === 'en' ? "⚠️ You are injured. Heal first at the hospital." : "⚠️ Estás lesionado. Cúrate primero en el hospital.");
                 return;
             }
             if (!nivelMundialDesbloqueado) {
-                logTextoLimpio(currentLang === 'en' ? "🔒 High-end bikes can only be purchased at the World Level." : "🔒 Las bicicletas de gama alta solo se compran en el Nivel Mundial.");
+                logTextoLimpio(lang === 'en' ? "🔒 High-end bikes can only be purchased at the World Level." : "🔒 Las bicicletas de gama alta solo se compran en el Nivel Mundial.");
                 return;
             }
             if (dinero >= costo) {
                 dinero -= costo;
                 inventario[bici] = true;
                 if (bici === 'santacruz') {
-                    logTextoLimpio(currentLang === 'en' ? "🌟 YOU ACQUIRED THE SANTA CRUZ V10! Its top-tier suspension drastically reduces injuries, but stay focused on extreme tracks!" : "🌟 ¡ADQUIRISTE LA SANTA CRUZ V10! Su suspensión de alta gama reduce drásticamente las lesiones, ¡pero mantén la concentración en los circuitos extremos!");
+                    logTextoLimpio(lang === 'en' ? "🌟 YOU ACQUIRED THE SANTA CRUZ V10! Its top-tier suspension drastically reduces injuries, but stay focused on extreme tracks!" : "🌟 ¡ADQUIRISTE LA SANTA CRUZ V10! Su suspensión de alta gama reduce drásticamente las lesiones, ¡pero mantén la concentración en los circuitos extremos!");
                 } else {
-                    logTextoLimpio(currentLang === 'en' ? "🚲 IMPRESSIVE! You acquired the professional bike." : "🚲 ¡IMPRESIONANTE! Adquiriste la bicicleta profesional.");
+                    logTextoLimpio(lang === 'en' ? "🚲 IMPRESSIVE! You acquired the professional bike." : "🚲 ¡IMPRESIONANTE! Adquiriste la bicicleta profesional.");
                 }
                 actualizarUI();
             } else {
                 let falta = costo - dinero;
-                logTextoLimpio(currentLang === 'en' ? `❌ You don't have enough money for this bike. Short $${falta.toLocaleString('es-CL')} CLP.` : `❌ No tienes suficiente dinero para esta bicicleta. Te faltan $${falta.toLocaleString('es-CL')} CLP.`);
+                logTextoLimpio(lang === 'en' ? `❌ You don't have enough money for this bike. Short $${falta.toLocaleString('es-CL')} CLP.` : `❌ No tienes suficiente dinero para esta bicicleta. Te faltan $${falta.toLocaleString('es-CL')} CLP.`);
             }
         }
 
@@ -599,36 +610,38 @@
         }
 
         function entrenar() {
+            let lang = getLang();
             if (lesionado) {
-                logTextoLimpio(currentLang === 'en' ? "⚠️ You are injured at the hospital. You must heal before training again." : "⚠️ Estás lesionado en el hospital. Debes curarte antes de volver a entrenar.");
+                logTextoLimpio(lang === 'en' ? "⚠️ You are injured at the hospital. You must heal before training again." : "⚠️️ Estás lesionado en el hospital. Debes curarte antes de volver a entrenar.");
                 return;
             }
             let riesgo = calcularRiesgo('amateur') - 0.10;
             if (Math.random() < riesgo) {
                 lesionado = true;
-                logTextoLimpio(currentLang === 'en' ? "💥 Crash while training! Even with a good bike, a bad move injured you." : "💥 ¡Caída entrenando! Incluso con buena bici, un mal movimiento te lesionó.");
+                logTextoLimpio(lang === 'en' ? "💥 Crash while training! Even with a good bike, a bad move injured you." : "💥 ¡Caída entrenando! Incluso con buena bici, un mal movimiento te lesionó.");
             } else {
                 let ganado = 25000;
                 dinero += ganado;
-                logTextoLimpio(currentLang === 'en' ? `🚴 Training successfully completed. You earned $${ganado.toLocaleString('es-CL')} CLP.` : `🚴 Entrenamiento completado con éxito. Ganaste $${ganado.toLocaleString('es-CL')} CLP.`);
+                logTextoLimpio(lang === 'en' ? `🚴 Training successfully completed. You earned $${ganado.toLocaleString('es-CL')} CLP.` : `🚴 Entrenamiento completado con éxito. Ganaste $${ganado.toLocaleString('es-CL')} CLP.`);
             }
             actualizarUI();
         }
 
         function competir() {
+            let lang = getLang();
             if (lesionado) {
-                logTextoLimpio(currentLang === 'en' ? "⚠️ You are injured, you cannot compete." : "⚠ Estás lesionado, no puedes competir.");
+                logTextoLimpio(lang === 'en' ? "⚠️ You are injured, you cannot compete." : "⚠ Estás lesionado, no puedes competir.");
                 return;
             }
 
             let nivel = document.getElementById('select-nivel').value;
 
             if (nivel === 'nacional' && !nivelNacionalDesbloqueado) {
-                logTextoLimpio(currentLang === 'en' ? "🔒 National Level is locked. Complete the requirements!" : "🔒 El Nivel Nacional está bloqueado. ¡Completa los requisitos!");
+                logTextoLimpio(lang === 'en' ? "🔒 National Level is locked. Complete the requirements!" : "🔒 El Nivel Nacional está bloqueado. ¡Completa los requisitos!");
                 return;
             }
             if (nivel === 'mundial' && !nivelMundialDesbloqueado) {
-                logTextoLimpio(currentLang === 'en' ? "🔒 World Level is locked. Complete the requirements!" : "🔒 El Nivel Mundial está bloqueado. ¡Completa los requisitos!");
+                logTextoLimpio(lang === 'en' ? "🔒 World Level is locked. Complete the requirements!" : "🔒 El Nivel Mundial está bloqueado. ¡Completa los requisitos!");
                 return;
             }
 
@@ -641,10 +654,10 @@
 
             if (Math.random() < riesgo) {
                 lesionado = true;
-                logTextoLimpio(currentLang === 'en' ? `💥 CRASH AT ${nivel.toUpperCase()} LEVEL! The circuit's demands got the better of you and you suffered an injury.` : `💥 ¡ACCIDENTE EN NIVEL ${nivel.toUpperCase()}! La exigencia del circuito te pasó la cuenta y sufriste una lesión.`);
+                logTextoLimpio(lang === 'en' ? `💥 CRASH AT ${nivel.toUpperCase()} LEVEL! The circuit's demands got the better of you and you suffered an injury.` : `💥 ¡ACCIDENTE EN NIVEL ${nivel.toUpperCase()}! La exigencia del circuito te pasó la cuenta y sufriste una lesión.`);
             } else {
                 dinero += premio;
-                logTextoLimpio(currentLang === 'en' ? `🏆 VICTORY AT ${nivel.toUpperCase()} LEVEL! You conquered the course and won $${premio.toLocaleString('es-CL')} CLP.` : `🏆 ¡VICTORIA EN NIVEL ${nivel.toUpperCase()}! Conquistaste el circuito y ganaste $${premio.toLocaleString('es-CL')} CLP.`);
+                logTextoLimpio(lang === 'en' ? `🏆 VICTORY AT ${nivel.toUpperCase()} LEVEL! You conquered the course and won $${premio.toLocaleString('es-CL')} CLP.` : `🏆 ¡VICTORIA EN NIVEL ${nivel.toUpperCase()}! Conquistaste el circuito y ganaste $${premio.toLocaleString('es-CL')} CLP.`);
                 
                 if (nivel === 'amateur' && !nivelNacionalDesbloqueado) {
                     winsAmateur++;
@@ -656,21 +669,19 @@
         }
 
         function visitarHospital() {
+            let lang = getLang();
             let costoClinica = 60000;
             if (dinero >= costoClinica) {
                 dinero -= costoClinica;
                 lesionado = false;
-                logTextoLimpio(currentLang === 'en' ? `🏥 You paid $${costoClinica.toLocaleString('es-CL')} CLP for medical bills and you are now recovered.` : `🏥 Pagaste $${costoClinica.toLocaleString('es-CL')} CLP de clínica y ya estás recuperado.`);
+                logTextoLimpio(lang === 'en' ? `🏥 You paid $${costoClinica.toLocaleString('es-CL')} CLP for medical bills and you are now recovered.` : `🏥 Pagaste $${costoClinica.toLocaleString('es-CL')} CLP de clínica y ya estás recuperado.`);
             } else {
                 dinero = 15000;
                 lesionado = false;
-                logTextoLimpio(currentLang === 'en' ? "🏥 Club friends helped you with medical expenses. You are left with $15,000 CLP." : "🏥 Amigos del club te ayudaron con los gastos médicos. Quedas con $15.000 CLP.");
+                logTextoLimpio(lang === 'en' ? "🏥 Club friends helped you with medical expenses. You are left with $15,000 CLP." : "🏥 Amigos del club te ayudaron con los gastos médicos. Quedas con $15.000 CLP.");
             }
             actualizarUI();
         }
-    </script>
-</body>
-</html>
     </script>
 </body>
 </html>
