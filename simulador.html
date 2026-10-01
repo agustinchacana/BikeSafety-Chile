@@ -185,7 +185,7 @@
 <body>
     <header>
         <nav class="navbar">
-            <div class="logo">🛡️ BikeSafety Chile</div>
+            <div class="logo">🛡️️ BikeSafety Chile</div>
             <div class="nav-right">
                 <ul class="nav-links">
                     <li><a href="index.html" data-i18n="nav_volver_inicio">Volver al Inicio</a></li>
@@ -335,6 +335,12 @@
     <!-- Script Global de Traducción y Lógica de Juego -->
     <script src="i18n.js"></script>
     <script>
+        // Declaración de seguridad para que currentLang nunca dé error de referencia
+        let currentLang = 'es';
+        if (typeof window.currentLang !== 'undefined') {
+            currentLang = window.currentLang;
+        }
+
         // Diccionario extendido para la página del Simulador
         if (typeof translations !== 'undefined') {
             translations.es.sim_meta_titulo = "Simulador Definitivo de DH | BikeSafety Chile";
@@ -525,7 +531,7 @@
 
         function comprarItem(item, costo) {
             if (lesionado) {
-                logTextoLimpio(currentLang === 'en' ? "⚠️ You are injured. Visit the hospital before buying gear." : "⚠️️ Estás lesionado. Visita el hospital antes de comprar equipo.");
+                logTextoLimpio(currentLang === 'en' ? "⚠️ You are injured. Visit the hospital before buying gear." : "⚠ Estás lesionado. Visita el hospital antes de comprar equipo.");
                 return;
             }
             if ((item === 'pecheraIntermedia' || item === 'cascoCarbon') && !nivelNacionalDesbloqueado) {
@@ -594,7 +600,7 @@
 
         function entrenar() {
             if (lesionado) {
-                logTextoLimpio(currentLang === 'en' ? "⚠️️ You are injured at the hospital. You must heal before training again." : "⚠️ Estás lesionado en el hospital. Debes curarte antes de volver a entrenar.");
+                logTextoLimpio(currentLang === 'en' ? "⚠️ You are injured at the hospital. You must heal before training again." : "⚠️ Estás lesionado en el hospital. Debes curarte antes de volver a entrenar.");
                 return;
             }
             let riesgo = calcularRiesgo('amateur') - 0.10;
@@ -611,7 +617,7 @@
 
         function competir() {
             if (lesionado) {
-                logTextoLimpio(currentLang === 'en' ? "⚠️ You are injured, you cannot compete." : "⚠️ Estás lesionado, no puedes competir.");
+                logTextoLimpio(currentLang === 'en' ? "⚠️ You are injured, you cannot compete." : "⚠ Estás lesionado, no puedes competir.");
                 return;
             }
 
@@ -662,6 +668,9 @@
             }
             actualizarUI();
         }
+    </script>
+</body>
+</html>
     </script>
 </body>
 </html>
