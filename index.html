@@ -10,8 +10,15 @@
 
     <header>
         <nav class="navbar">
-            <div class="logo">🛡️ BikeSafety Chile</div>
-            <div class="nav-right">
+            <a href="index.html" class="logo">🛡️ BikeSafety Chile</a>
+            
+            <!-- Botón de flecha / menú hamburguesa para celulares -->
+            <button class="menu-toggle-btn" onclick="toggleMenu()" id="menu-btn" aria-label="Abrir menú">
+                ▼
+            </button>
+
+            <!-- Contenedor que se esconde y se despliega con la flecha -->
+            <div class="nav-collapse" id="nav-collapse">
                 <ul class="nav-links">
                     <li><a href="index.html" data-i18n="nav_inicio">Inicio</a></li>
                     <li><a href="#disciplinas-grid" data-i18n="nav_disciplinas">Disciplinas</a></li>
@@ -96,6 +103,22 @@
     <footer>
         <p data-i18n="footer_index">&copy; 2026 - Conciencia Vial y Ciclística. Proyecto Escolar.</p>
     </footer>
+
+    <!-- Script para desplegar/esconder menú con la flechita -->
+    <script>
+        function toggleMenu() {
+            const navCollapse = document.getElementById('nav-collapse');
+            const menuBtn = document.getElementById('menu-btn');
+            navCollapse.classList.toggle('active');
+            
+            // Cambia la flecha de sentido al presionar (▲ / ▼)
+            if (navCollapse.classList.contains('active')) {
+                menuBtn.textContent = '▲';
+            } else {
+                menuBtn.textContent = '▼';
+            }
+        }
+    </script>
 
     <!-- Script Global de Traducción -->
     <script src="i18n.js"></script>
