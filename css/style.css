@@ -11,7 +11,7 @@
     --text-main: #ffffff;
     --text-muted: #94a3b8;
     --color-primary: #3b82f6;      
-    --color-accent: #f59e0b;       
+    --color-accent: #f59e0b;        
     --color-success: #10b981;      
     --border-color: rgba(59, 130, 246, 0.25);
     --border-hover: rgba(59, 130, 246, 0.7);
@@ -109,7 +109,12 @@ header {
     align-items: center;
     text-align: center;
     padding: 140px 24px 60px 24px;
-    background: linear-gradient(180deg, rgba(7, 11, 25, 0.5) 0%, rgba(7, 11, 25, 1) 100%);
+    /* Usamos '../' para salir de la carpeta css y ubicar la imagen en la raíz del proyecto */
+    background-color: #0b0f19 !important;
+    background-image: linear-gradient(rgba(11, 15, 25, 0.7), rgba(11, 15, 25, 0.88)), url('../IMG_6722.JPG') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
     border-bottom: 1px solid var(--border-color);
 }
 
